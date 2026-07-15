@@ -3,47 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Quiz</title>
+    <title>Amazing Quiz Experience</title>
     <style>
-        body { font-family: sans-serif; background: #f9f9f9; padding: 20px; margin: 0; }
-        .quiz-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
-        .option-btn { display: block; w_idth: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; background: #fff; cursor: pointer; text-align: left; font-size: 16px; }
-        .option-btn:hover { background: #f0f0f0; }
-        #feedback { margin-top: 15px; font-weight: bold; font-size: 16px; }
+        :root {
+            --primary: #673DE6;
+            --primary-hover: #532ec4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text: #1f2937;
+            --bg: #f9fafb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: transparent;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+
+        .quiz-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            width: 100%;
+            max-width: 480px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            margin-right: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            min-width: 45px;
+            text-align: right;
+        }
+
+        .question-text {
+            font-size: 20px;
+            color: var(--text);
+            font-weight: 700;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: #f5f3ff;
+            transform: translateY(-1px);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        /* State Classes */
+        .option-btn.correct {
+            background: #ecfdf5;
+            border-color: var(--success);
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong {
+            background: #fef2f2;
+            border-color: var(--danger);
+            color: #991b1b;
+        }
+
+        .next-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background 0.2s;
+            display: none;
+        }
+
+        .next-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Results Display */
+        .result-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .result-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f5f3ff;
+            border: 4px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+        }
+
+        .score-num {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .score-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .restart-btn {
+            background: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: opacity 0.2s;
+        }
+
+        .restart-btn:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
 
-<div class="quiz-container">
-    <h3>What does HTML stand for?</h3>
-    <button class="option-btn" onclick="checkAnswer(false, this)">A) HighText Machine Language</button>
-    <button class="option-btn" onclick="checkAnswer(true, this)">B) HyperText Markup Language</button>
-    <button class="option-btn" onclick="checkAnswer(false, this)">C) Hyperlink and Text Markup Language</button>
-    
-    <div id="feedback"></div>
+<div class="quiz-card">
+    <!-- Active Quiz Screen -->
+    <div id="quiz-screen">
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="progress-text" id="progress-text">1/3</div>
+        </div>
+        
+        <div class="question-text" id="question-field">Loading question...</div>
+        <div class="options-list" id="options-field"></div>
+        
+        <button class="next-btn" id="next-btn" onclick="handleNext()">Next Question →</button>
+    </div>
+
+    <!-- Complete State Screen -->
+    <div id="result-screen" class="result-screen">
+        <div class="result-icon" id="result-icon">🎉</div>
+        <h2 style="margin: 0; color: var(--text);">Quiz Completed!</h2>
+        <p id="result-message" style="color: #6b7280; margin: 8px 0 20px 0;">Great effort!</p>
+        
+        <div class="score-circle">
+            <div class="score-num" id="final-score">0</div>
+            <div class="score-label">SCORE</div>
+        </div>
+        
+        <button class="restart-btn" onclick="restartQuiz()">Try Again</button>
+    </div>
 </div>
 
 <script>
-function checkAnswer(isCorrect, element) {
-    const feedback = document.getElementById('feedback');
-    const buttons = document.querySelectorAll('.option-btn');
-    
-    // Disable buttons after answer
-    buttons.forEach(btn => btn.disabled = true);
-    
-    if (isCorrect) {
-        element.style.background = '#d4edda';
-        element.style.borderColor = '#c3e6cb';
-        feedback.innerHTML = '🎉 Correct!';
-        feedback.style.color = '#155724';
-    } else {
-        element.style.background = '#f8d7da';
-        element.style.borderColor = '#f5c6cb';
-        feedback.innerHTML = '❌ Incorrect. Try refreshing to try again.';
-        feedback.style.color = '#721c24';
-    }
-}
-</script>
+    // Define questions data structure 
+    const quizData = [
+        {
+            question: "What does HTML stand for?",
+            options: [
+                "HighText Machine Language",
+                "HyperText Markup Language",
+                "Hyperlink and Text Markup Language",
+                "Home Tool Markup Language"
+            ],
+            correct: 1
+        },
+        {
+            question: "Which programming language adds interactivity to a website?",
+            options: [
+                "CSS",
+                "HTML",
+                "JavaScript",
+                "SQL"
+            ],
+            correct: 2
+        },
+        {
+            question: "Which property is used in CSS to change the background color?",
+            options: [
+                "color",
+                "background-color",
+                "bgcolor",
+                "surface-style"
+            ],
+            correct: 1
+        }
+    ];
 
-</body>
-</html>
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const questionField = document.getElementById('question-field');
+    const optionsField = document.getElementById('options-field');
+    const nextBtn = document.getElementById('next-btn');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+
+    function initQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        resultScreen.style.display = 'none';
+        quizScreen.style.display = 'block';
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        nextBtn.style.display = 'none';
+        optionsField.innerHTML = '';
+        
+        const currentData = quizData[currentQuestionIndex];
+        questionField.textContent = currentData.question;
+        
+        // Dynamic Progress Handling
+        const progressPercent = ((currentQuestionIndex) / quizData.length) * 100;
+        progressFill.style.width = `${progressPercent}%`;
+        progressText.textContent = `${currentQuestionIndex + 1}/${quizData.length}`;
+
+        // Render Buttons
+        currentData.options.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.textContent = option;
+            button.onclick = () => selectOption(index, button);
+            optionsField.appendChild(button);
+        });
+    }
+
+    function selectOption(selectedIndex, selectedButton) {
+        const currentData = quizData[currentQuestionIndex];
+        const allButtons = optionsField.querySelectorAll('.option-btn');
+        
+        // Block consecutive clicks
+        allButtons.forEach(btn => btn.disabled = true);
+        
+        if (selectedIndex === currentData.correct) {
+            selectedButton.classList.add('correct');
+            selectedButton.innerHTML += ' <span>✓</span>';
+            score++;
+        } else {
+            selectedButton.classList.add('wrong');
+            selectedButton.innerHTML += ' <span>✕</span>';
+            // Show user where the correct answer was hiding
+            allButtons[currentData.correct].classList.add('correct');
+        }
+        
+        nextBtn.style.display = 'block';
+    }
+
+    function handleNext() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        progressFill.style.width = '100%';
+        quizScreen.style.display = 'none';
+        resultScreen.style.display = 'block';
+        
+        document.getElementById('final-score').textContent = `${score}/${quizData.length}`;
+        
+        const iconField = document.getElementById('result-icon');
