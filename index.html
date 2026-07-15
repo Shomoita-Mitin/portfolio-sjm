@@ -2,343 +2,559 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazing Quiz Experience</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>WCAG Accessibility Trainer</title>
+
     <style>
         :root {
-            --primary: #673DE6;
-            --primary-hover: #532ec4;
-            --success: #10b981;
-            --danger: #ef4444;
-            --text: #1f2937;
-            --bg: #f9fafb;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #047857;
+            --success-bg: #ecfdf5;
+            --success-border: #6ee7b7;
+            --error: #991b1b;
+            --error-bg: #fef2f2;
+            --error-border: #fca5a5;
+            --text-dark: #1f2937;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --card-bg: #ffffff;
+            --focus: #2563eb;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+                Arial, sans-serif;
             background: transparent;
+            color: var(--text-dark);
             margin: 0;
             padding: 10px;
+            min-height: 90vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 90vh;
         }
 
-        .quiz-card {
-            background: #ffffff;
+        .trainer-card {
+            background: var(--card-bg);
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             padding: 30px;
             width: 100%;
-            max-width: 480px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
+            max-width: 500px;
         }
 
-        .progress-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .header {
             margin-bottom: 20px;
         }
 
-        .progress-bar {
-            flex-grow: 1;
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 3px;
-            margin-right: 15px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-
-        .progress-text {
-            font-size: 14px;
-            font-weight: 600;
-            color: #6b7280;
-            min-width: 45px;
-            text-align: right;
-        }
-
-        .question-text {
-            font-size: 20px;
-            color: var(--text);
+        .badge {
+            display: inline-block;
+            background: #eef2f6;
+            color: #475569;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 700;
-            margin-bottom: 25px;
-            line-height: 1.4;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .options-list {
+        h1 {
+            color: var(--text-dark);
+            margin: 12px 0 6px;
+            font-size: 24px;
+            line-height: 1.3;
+        }
+
+        .description {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0 0 25px;
+            line-height: 1.6;
+        }
+
+        .preview-box {
+            border: 2px dashed var(--border-light);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition:
+                background-color 0.4s ease,
+                border-color 0.4s ease;
+        }
+
+        .preview-text {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.5;
+            margin: 0;
+            transition: color 0.4s ease;
+        }
+
+        .preview-text a {
+            font-weight: 700;
+        }
+
+        fieldset {
+            border: 0;
+            padding: 0;
+            margin: 0;
+            min-width: 0;
+        }
+
+        legend {
+            font-size: 15px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 12px;
+            padding: 0;
+        }
+
+        .options-grid {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .option-btn {
+        .fix-btn {
+            width: 100%;
             background: #ffffff;
-            border: 2px solid #e5e7eb;
+            border: 2px solid var(--border-light);
             border-radius: 10px;
             padding: 14px 20px;
-            font-size: 16px;
-            font-weight: 500;
+            font: inherit;
+            font-size: 15px;
+            font-weight: 600;
             text-align: left;
             cursor: pointer;
-            outline: none;
-            transition: all 0.2s ease;
-            color: var(--text);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: var(--text-dark);
+            transition:
+                border-color 0.2s ease,
+                background-color 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
-        .option-btn:hover:not(:disabled) {
+        .fix-btn:hover:not(:disabled) {
             border-color: var(--primary);
-            background: #f5f3ff;
-            transform: translateY(-1px);
+            background: #f8fafc;
         }
 
-        .option-btn:disabled {
+        .fix-btn:focus-visible,
+        .action-btn:focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 3px;
+        }
+
+        .fix-btn:disabled {
             cursor: not-allowed;
+            opacity: 0.75;
         }
 
-        /* State Classes */
-        .option-btn.correct {
-            background: #ecfdf5;
+        .fix-btn.selected-correct {
             border-color: var(--success);
-            color: #065f46;
+            background: var(--success-bg);
+        }
+
+        .fix-btn.selected-error {
+            border-color: #dc2626;
+            background: var(--error-bg);
+        }
+
+        .feedback-area {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            line-height: 1.5;
             font-weight: 600;
+            animation: fadeIn 0.3s ease;
         }
 
-        .option-btn.wrong {
-            background: #fef2f2;
-            border-color: var(--danger);
-            color: #991b1b;
+        .feedback-success {
+            display: block;
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: #065f46;
         }
 
-        .next-btn {
+        .feedback-error {
+            display: block;
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
+            color: var(--error);
+        }
+
+        .action-btn {
             width: 100%;
             background: var(--primary);
-            color: white;
+            color: #ffffff;
             border: none;
             border-radius: 10px;
             padding: 14px;
+            font: inherit;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            margin-top: 25px;
-            transition: background 0.2s;
+            margin-top: 20px;
             display: none;
         }
 
-        .next-btn:hover {
+        .action-btn:hover {
             background: var(--primary-hover);
         }
 
-        /* Results Display */
-        .result-screen {
+        .progress {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 20px;
             text-align: center;
-            display: none;
         }
 
-        .result-icon {
-            font-size: 64px;
-            margin-bottom: 15px;
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
-        .score-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: #f5f3ff;
-            border: 4px solid var(--primary);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 20px auto;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .score-num {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--primary);
+        @media (max-width: 540px) {
+            .trainer-card {
+                padding: 22px;
+            }
+
+            h1 {
+                font-size: 21px;
+            }
+
+            .preview-box {
+                padding: 25px 15px;
+            }
         }
 
-        .score-label {
-            font-size: 12px;
-            color: #6b7280;
-            font-weight: 600;
-        }
-
-        .restart-btn {
-            background: #1f2937;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 12px 25px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: opacity 0.2s;
-        }
-
-        .restart-btn:hover {
-            opacity: 0.9;
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
+
 <body>
+    <main class="trainer-card" aria-labelledby="module-title">
+        <div id="module-container"></div>
+    </main>
 
-<div class="quiz-card">
-    <!-- Active Quiz Screen -->
-    <div id="quiz-screen">
-        <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-            <div class="progress-text" id="progress-text">1/3</div>
-        </div>
-        
-        <div class="question-text" id="question-field">Loading question...</div>
-        <div class="options-list" id="options-field"></div>
-        
-        <button class="next-btn" id="next-btn" onclick="handleNext()">Next Question →</button>
-    </div>
+    <script>
+        "use strict";
 
-    <!-- Complete State Screen -->
-    <div id="result-screen" class="result-screen">
-        <div class="result-icon" id="result-icon">🎉</div>
-        <h2 style="margin: 0; color: var(--text);">Quiz Completed!</h2>
-        <p id="result-message" style="color: #6b7280; margin: 8px 0 20px 0;">Great effort!</p>
-        
-        <div class="score-circle">
-            <div class="score-num" id="final-score">0</div>
-            <div class="score-label">SCORE</div>
-        </div>
-        
-        <button class="restart-btn" onclick="restartQuiz()">Try Again</button>
-    </div>
-</div>
+        const wcagScenarios = [
+            {
+                id: 1,
+                badge: "WCAG 2.1 — 1.4.3 Contrast",
+                title: "Color Contrast Failure",
+                description:
+                    "Low-contrast text can be difficult for users with low vision to read. Select a color combination that provides stronger contrast.",
+                initialBg: "#5C4033",
+                initialColor: "#FF0000",
+                previewText: "Crucial warning: Read this text",
+                options: [
+                    {
+                        text:
+                            "Change the background to dark gray and use light red text",
+                        bg: "#22252A",
+                        color: "#FFB3B3",
+                        correct: true,
+                        feedback:
+                            "Correct. The light text creates much stronger contrast against the dark background."
+                    },
+                    {
+                        text:
+                            "Keep the brown background and change the text to dark orange",
+                        bg: "#5C4033",
+                        color: "#D97706",
+                        correct: false,
+                        feedback:
+                            "Not quite. Dark orange against dark brown still provides weak visual contrast."
+                    },
+                    {
+                        text:
+                            "Change the background to light tan and use dark red text",
+                        bg: "#F5F5DC",
+                        color: "#660000",
+                        correct: true,
+                        feedback:
+                            "Correct. The dark red text is clearly distinguishable from the light background."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                badge: "WCAG 2.1 — 2.4.4 Link Purpose",
+                title: "Unclear Link Text",
+                description:
+                    "Links should clearly describe their destination or purpose. Select the option that makes the link understandable in context.",
+                initialBg: "#F8FAFC",
+                initialColor: "#1E2937",
+                previewHtml:
+                    'To read our company documentation, select <a href="https://example.com/documentation">here</a>.',
+                options: [
+                    {
+                        text:
+                            "Change the link text to “Company PDF documentation”",
+                        isTextFix: true,
+                        newHtml:
+                            'Download our <a href="https://example.com/documentation">company PDF documentation</a>.',
+                        correct: true,
+                        feedback:
+                            "Correct. The descriptive link text explains the destination and purpose of the link."
+                    },
+                    {
+                        text:
+                            "Keep the word “here,” but make it bold and underlined",
+                        isTextFix: true,
+                        newHtml:
+                            'To read our company documentation, select <a href="https://example.com/documentation" style="font-weight:700; text-decoration:underline;">here</a>.',
+                        correct: false,
+                        feedback:
+                            "Not quite. Visual styling does not make the link purpose clearer to screen-reader users."
+                    }
+                ]
+            }
+        ];
 
-<script>
-    // Define questions data structure 
-    const quizData = [
-        {
-            question: "What does HTML stand for?",
-            options: [
-                "HighText Machine Language",
-                "HyperText Markup Language",
-                "Hyperlink and Text Markup Language",
-                "Home Tool Markup Language"
-            ],
-            correct: 1
-        },
-        {
-            question: "Which programming language adds interactivity to a website?",
-            options: [
-                "CSS",
-                "HTML",
-                "JavaScript",
-                "SQL"
-            ],
-            correct: 2
-        },
-        {
-            question: "Which property is used in CSS to change the background color?",
-            options: [
-                "color",
-                "background-color",
-                "bgcolor",
-                "surface-style"
-            ],
-            correct: 1
+        let currentModuleIndex = 0;
+
+        function renderModule() {
+            const data = wcagScenarios[currentModuleIndex];
+            const container = document.getElementById("module-container");
+
+            const initialContent =
+                data.previewHtml !== undefined
+                    ? data.previewHtml
+                    : escapeHtml(data.previewText);
+
+            container.innerHTML = `
+                <section aria-labelledby="module-title">
+                    <div class="header">
+                        <span class="badge">${escapeHtml(data.badge)}</span>
+
+                        <h1 id="module-title" tabindex="-1">
+                            ${escapeHtml(data.title)}
+                        </h1>
+
+                        <p class="description">
+                            ${escapeHtml(data.description)}
+                        </p>
+                    </div>
+
+                    <div
+                        class="preview-box"
+                        id="sandbox"
+                        style="background-color: ${data.initialBg};"
+                        aria-labelledby="preview-label"
+                    >
+                        <span id="preview-label" class="visually-hidden">
+                            Example preview
+                        </span>
+
+                        <p
+                            class="preview-text"
+                            id="sandbox-text"
+                            style="color: ${data.initialColor};"
+                        >
+                            ${initialContent}
+                        </p>
+                    </div>
+
+                    <fieldset>
+                        <legend>Select the accessible fix:</legend>
+
+                        <div
+                            class="options-grid"
+                            id="options-field"
+                        ></div>
+                    </fieldset>
+
+                    <div
+                        class="feedback-area"
+                        id="feedback-box"
+                        role="status"
+                        aria-live="polite"
+                        aria-atomic="true"
+                        tabindex="-1"
+                    ></div>
+
+                    <button
+                        class="action-btn"
+                        id="action-btn"
+                        type="button"
+                    >
+                        Next WCAG principle
+                    </button>
+
+                    <p class="progress">
+                        Scenario ${currentModuleIndex + 1} of
+                        ${wcagScenarios.length}
+                    </p>
+                </section>
+            `;
+
+            const optionsField = document.getElementById("options-field");
+
+            data.options.forEach((option, index) => {
+                const button = document.createElement("button");
+
+                button.type = "button";
+                button.className = "fix-btn";
+                button.textContent = option.text;
+                button.dataset.optionIndex = index;
+
+                button.addEventListener("click", function () {
+                    evaluateChoice(option, button);
+                });
+
+                optionsField.appendChild(button);
+            });
+
+            const actionButton = document.getElementById("action-btn");
+
+            if (currentModuleIndex === wcagScenarios.length - 1) {
+                actionButton.textContent = "Restart training";
+            }
+
+            actionButton.addEventListener("click", nextModule);
         }
-    ];
 
-    let currentQuestionIndex = 0;
-    let score = 0;
+        function evaluateChoice(option, clickedButton) {
+            const sandbox = document.getElementById("sandbox");
+            const sandboxText = document.getElementById("sandbox-text");
+            const feedbackBox = document.getElementById("feedback-box");
+            const actionButton = document.getElementById("action-btn");
+            const allButtons = document.querySelectorAll(".fix-btn");
 
-    const quizScreen = document.getElementById('quiz-screen');
-    const resultScreen = document.getElementById('result-screen');
-    const questionField = document.getElementById('question-field');
-    const optionsField = document.getElementById('options-field');
-    const nextBtn = document.getElementById('next-btn');
-    const progressFill = document.getElementById('progress-fill');
-    const progressText = document.getElementById('progress-text');
+            allButtons.forEach((button) => {
+                button.disabled = true;
+                button.classList.remove(
+                    "selected-correct",
+                    "selected-error"
+                );
+            });
 
-    function initQuiz() {
-        currentQuestionIndex = 0;
-        score = 0;
-        resultScreen.style.display = 'none';
-        quizScreen.style.display = 'block';
-        loadQuestion();
-    }
+            if (option.bg) {
+                sandbox.style.backgroundColor = option.bg;
+            }
 
-    function loadQuestion() {
-        nextBtn.style.display = 'none';
-        optionsField.innerHTML = '';
-        
-        const currentData = quizData[currentQuestionIndex];
-        questionField.textContent = currentData.question;
-        
-        // Dynamic Progress Handling
-        const progressPercent = ((currentQuestionIndex) / quizData.length) * 100;
-        progressFill.style.width = `${progressPercent}%`;
-        progressText.textContent = `${currentQuestionIndex + 1}/${quizData.length}`;
+            if (option.color) {
+                sandboxText.style.color = option.color;
+            }
 
-        // Render Buttons
-        currentData.options.forEach((option, index) => {
-            const button = document.createElement('button');
-            button.className = 'option-btn';
-            button.textContent = option;
-            button.onclick = () => selectOption(index, button);
-            optionsField.appendChild(button);
-        });
-    }
+            if (option.isTextFix && option.newHtml) {
+                sandboxText.innerHTML = option.newHtml;
+            }
 
-    function selectOption(selectedIndex, selectedButton) {
-        const currentData = quizData[currentQuestionIndex];
-        const allButtons = optionsField.querySelectorAll('.option-btn');
-        
-        // Block consecutive clicks
-        allButtons.forEach(btn => btn.disabled = true);
-        
-        if (selectedIndex === currentData.correct) {
-            selectedButton.classList.add('correct');
-            selectedButton.innerHTML += ' <span>✓</span>';
-            score++;
-        } else {
-            selectedButton.classList.add('wrong');
-            selectedButton.innerHTML += ' <span>✕</span>';
-            // Show user where the correct answer was hiding
-            allButtons[currentData.correct].classList.add('correct');
+            feedbackBox.textContent = option.feedback;
+
+            if (option.correct) {
+                clickedButton.classList.add("selected-correct");
+                clickedButton.setAttribute("aria-label", `${option.text}. Correct.`);
+
+                feedbackBox.className =
+                    "feedback-area feedback-success";
+
+                sandbox.style.borderStyle = "solid";
+                sandbox.style.borderColor = "#047857";
+
+                actionButton.style.display = "block";
+
+                window.setTimeout(() => {
+                    feedbackBox.focus();
+                }, 50);
+            } else {
+                clickedButton.classList.add("selected-error");
+                clickedButton.setAttribute(
+                    "aria-label",
+                    `${option.text}. Incorrect.`
+                );
+
+                feedbackBox.className =
+                    "feedback-area feedback-error";
+
+                sandbox.style.borderStyle = "solid";
+                sandbox.style.borderColor = "#DC2626";
+
+                window.setTimeout(() => {
+                    feedbackBox.focus();
+                }, 50);
+
+                window.setTimeout(() => {
+                    allButtons.forEach((button) => {
+                        button.disabled = false;
+                    });
+
+                    clickedButton.focus();
+                }, 1500);
+            }
         }
-        
-        nextBtn.style.display = 'block';
-    }
 
-    function handleNext() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < quizData.length) {
-            loadQuestion();
-        } else {
-            showResults();
+        function nextModule() {
+            currentModuleIndex += 1;
+
+            if (currentModuleIndex >= wcagScenarios.length) {
+                currentModuleIndex = 0;
+            }
+
+            renderModule();
+
+            const title = document.getElementById("module-title");
+
+            window.setTimeout(() => {
+                title.focus();
+            }, 50);
         }
-    }
 
-    function showResults() {
-        progressFill.style.width = '100%';
-        quizScreen.style.display = 'none';
-        resultScreen.style.display = 'block';
-        
-        document.getElementById('final-score').textContent = `${score}/${quizData.length}`;
-        
-        const iconField = document.getElementById('result-icon');
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        renderModule();
+    </script>
+</body>
+</html>
