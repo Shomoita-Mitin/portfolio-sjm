@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="An interactive visual representation of a research journey exploring Parkinson's disease, Freezing of Gait, attention-based deep learning, collaboration, and publication."
+    >
+
+    <title>After All This Time: Always — A Research Journey</title>
+
+    <style>
+        :root {
+            --red: #b91c1c;
+            --deep-red: #7f1d1d;
+            --bright-red: #dc2626;
+            --gold: #facc15;
+            --dark-gold: #a16207;
+            --cream: #fff7ed;
+            --paper: #fffbeb;
+            --ink: #1f2937;
+            --muted: #64748b;
+            --night: #111827;
+            --night-light: #1f2937;
+            --green: #047857;
+            --blue: #1d4ed8;
+            --white: #ffffff;
+            --path: #d6d3d1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                "Segoe UI",
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                Arial,
+                sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(
+                    circle at top,
+                    #fff7ed 0,
+                    #fef2f2 34%,
+                    #ffffff 70%
+                );
+            overflow-x: hidden;
+        }
+
+        a {
+            color: var(--deep-red);
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid var(--blue);
+            outline-offset: 4px;
+        }
+
+        .skip-link {
+            position: absolute;
+            left: 12px;
+            top: -80px;
+            z-index: 1000;
+            padding: 12px 16px;
+            background: var(--night);
+            color: var(--white);
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .skip-link:focus {
+            top: 12px;
+        }
+
+        /* =========================
+           HERO
+        ========================== */
+
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 80px 24px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(127, 29, 29, 0.96),
+                    rgba(17, 24, 39, 0.97)
+                );
+            color: var(--white);
+        }
+
+        .hero-stars {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.65;
+            background-image:
+                radial-gradient(
+                    circle,
+                    rgba(255, 255, 255, 0.9) 1px,
+                    transparent 1.5px
+                );
+            background-size: 55px 55px;
+            animation: starMove 18s linear infinite;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            background: rgba(250, 204, 21, 0.13);
+            filter: blur(50px);
+            top: -150px;
+            right: -130px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 18px;
+            padding: 7px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2.7rem, 8vw, 6.8rem);
+            line-height: 0.98;
+            letter-spacing: -0.04em;
+        }
+
+        .hero h1 span {
+            display: block;
+            margin-top: 12px;
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .hero-description {
+            max-width: 690px;
+            margin: 28px auto 0;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            line-height: 1.8;
+            color: #e5e7eb;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 34px;
+        }
+
+        .primary-link,
+        .secondary-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 12px 22px;
+            border-radius: 999px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .primary-link {
+            background: var(--gold);
+            color: var(--night);
+        }
+
+        .primary-link:hover {
+            background: #fde047;
+        }
+
+        .secondary-link {
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: var(--white);
+        }
+
+        .secondary-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: grid;
+            justify-items: center;
+            gap: 6px;
+            color: #e5e7eb;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .scroll-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gold);
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        /* =========================
+           INTRO
+        ========================== */
+
+        main {
+            position: relative;
+        }
+
+        .intro {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 100px 24px 70px;
+            text-align: center;
+        }
+
+        .intro-label {
+            color: var(--red);
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+        }
+
+        .intro h2 {
+            margin: 12px 0 20px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2rem, 5vw, 3.7rem);
+            line-height: 1.12;
+        }
+
+        .intro p {
+            margin: 0 auto;
+            max-width: 720px;
+            color: var(--muted);
+            font-size: 1.1rem;
+            line-height: 1.85;
+        }
+
+        /* =========================
+           JOURNEY
+        ========================== */
+
+        .journey {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+            padding-bottom: 120px;
+            position: relative;
+        }
+
+        .journey-line {
+            position: absolute;
+            top: 40px;
+            bottom: 100px;
+            left: 50%;
+            width: 6px;
+            border-radius: 999px;
+            background:
+                linear-gradient(
+                    to bottom,
+                    var(--path),
+                    var(--red),
+                    var(--gold),
+                    var(--green)
+                );
+            transform: translateX(-50%);
+        }
+
+        .traveler {
+            position: sticky;
+            top: 46%;
+            z-index: 8;
+            width: 72px;
+            height: 104px;
+            margin-left: calc(50% - 36px);
+            pointer-events: none;
+            transition: transform 0.4s ease;
+        }
+
+        .girl {
+            position: relative;
+            width: 72px;
+            height: 104px;
+            filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.12));
+        }
+
+        .girl-head {
+            position: absolute;
+            top: 1px;
+            left: 23px;
+            width: 27px;
+            height: 27px;
+            border: 4px solid var(--night);
+            border-radius: 50%;
+            background: #fed7aa;
+        }
+
+        .girl-hair {
+            position: absolute;
+            top: -4px;
+            left: 18px;
+            width: 38px;
+            height: 29px;
+            border-radius: 50% 50% 45% 45%;
+            background: #3f2a1d;
+            z-index: -1;
+        }
+
+        .girl-body {
+            position: absolute;
+            top: 32px;
+            left: 34px;
+            width: 5px;
+            height: 39px;
+            border-radius: 4px;
+            background: var(--night);
+        }
+
+        .girl-dress {
+            position: absolute;
+            top: 51px;
+            left: 20px;
+            width: 33px;
+            height: 31px;
+            background: var(--red);
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        }
+
+        .girl-arm-left,
+        .girl-arm-right,
+        .girl-leg-left,
+        .girl-leg-right {
+            position: absolute;
+            width: 5px;
+            border-radius: 4px;
+            background: var(--night);
+            transform-origin: top center;
+        }
+
+        .girl-arm-left {
+            top: 37px;
+            left: 31px;
+            height: 28px;
+            transform: rotate(42deg);
+        }
+
+        .girl-arm-right {
+            top: 37px;
+            left: 38px;
+            height: 29px;
+            transform: rotate(-48deg);
+        }
+
+        .girl-leg-left {
+            top: 75px;
+            left: 29px;
+            height: 30px;
+            transform: rotate(12deg);
+        }
+
+        .girl-leg-right {
+            top: 75px;
+            left: 42px;
+            height: 30px;
+            transform: rotate(-12deg);
+        }
+
+        .wand {
+            position: absolute;
+            top: 25px;
+            right: 0;
+            width: 5px;
+            height: 48px;
+            border-radius: 4px;
+            background: #6b4423;
+            transform: rotate(48deg);
+            transform-origin: bottom;
+        }
+
+        .wand-light {
+            position: absolute;
+            top: 7px;
+            right: -9px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(250, 204, 21, 0.8);
+            box-shadow:
+                0 0 14px var(--gold),
+                0 0 28px rgba(250, 204, 21, 0.8);
+            animation: glow 1.8s ease-in-out infinite;
+        }
+
+        .chapter {
+            min-height: 620px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 110px;
+            align-items: center;
+            padding: 70px 0;
+            position: relative;
+        }
+
+        .chapter:nth-of-type(even) .chapter-card {
+            grid-column: 2;
+        }
+
+        .chapter:nth-of-type(odd) .chapter-card {
+            grid-column: 1;
+        }
+
+        .chapter-card {
+            position: relative;
+            z-index: 4;
+            padding: 34px;
+            border: 1px solid rgba(127, 29, 29, 0.11);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 24px 70px rgba(31, 41, 55, 0.1);
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            transform: translateY(35px);
+            transition:
+                opacity 0.75s ease,
+                transform 0.75s ease;
+        }
+
+        .chapter-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chapter-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            margin-bottom: 18px;
+            border-radius: 50%;
+            background: var(--deep-red);
+            color: var(--white);
+            font-weight: 800;
+        }
+
+        .spell {
+            margin: 0 0 8px;
+            color: var(--red);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .chapter-card h2 {
+            margin: 0 0 16px;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            line-height: 1.15;
+        }
+
+        .chapter-card p {
+            color: #475569;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .chapter-list {
+            display: grid;
+            gap: 10px;
+            padding: 0;
+            margin: 22px 0 0;
+            list-style: none;
+        }
+
+        .chapter-list li {
+            position: relative;
+            padding-left: 28px;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .chapter-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--dark-gold);
+            font-weight: 800;
+        }
+
+        .path-point {
+            position: absolute;
+            z-index: 6;
+            left: 50%;
+            top: 50%;
+            width: 28px;
+            height: 28px;
+            border: 6px solid var(--white);
+            border-radius: 50%;
+            background: var(--red);
+            box-shadow: 0 0 0 2px rgba(127, 29, 29, 0.2);
+            transform: translate(-50%, -50%);
+        }
+
+        .chapter-icon {
+            display: grid;
+            place-items: center;
+            width: 74px;
+            height: 74px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background: #fef2f2;
+            font-size: 2rem;
+        }
+
+        /* =========================
+           CHAPTER DECORATIONS
+        ========================== */
+
+        .chapter-art {
+            display: grid;
+            place-items: center;
+            min-height: 350px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .chapter:nth-of-type(odd) .chapter-art {
+            grid-column: 2;
+        }
+
+        .chapter:nth-of-type(even) .chapter-art {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .signal {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            height: 180px;
+        }
+
+        .signal span {
+            display: block;
+            width: 9px;
+            border-radius: 20px;
+            background:
+                linear-gradient(
+                    to top,
+                    var(--deep-red),
+                    var(--bright-red)
+                );
+            animation: signal 1.3s ease-in-out infinite;
+        }
+
+        .signal span:nth-child(1) {
+            height: 34px;
+        }
+
+        .signal span:nth-child(2) {
+            height: 70px;
+            animation-delay: 0.1s;
+        }
+
+        .signal span:nth-child(3) {
+            height: 112px;
+            animation-delay: 0.2s;
+        }
+
+        .signal span:nth-child(4) {
+            height: 54px;
+            animation-delay: 0.3s;
+        }
+
+        .signal span:nth-child(5) {
+            height: 148px;
+            animation-delay: 0.4s;
+        }
+
+        .signal span:nth-child(6) {
+            height: 86px;
+            animation-delay: 0.5s;
+        }
+
+        .signal span:nth-child(7) {
+            height: 122px;
+            animation-delay: 0.6s;
+        }
+
+        .attention-rings {
+            position: relative;
+            width: 260px;
+            height: 260px;
+        }
+
+        .attention-rings span {
+            position: absolute;
+            inset: 50%;
+            border: 3px solid rgba(185, 28, 28, 0.4);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: ring 3s ease-out infinite;
+        }
+
+        .attention-rings span:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .attention-rings span:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        .attention-center {
+            position: absolute;
+            inset: 50%;
+            display: grid;
+            place-items: center;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: var(--deep-red);
+            color: var(--white);
+            font-weight: 800;
+            transform: translate(-50%, -50%);
+        }
+
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 48px);
+            gap: 14px;
+        }
+
+        .model-grid span {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--white);
+            color: var(--deep-red);
+            font-weight: 800;
+            box-shadow: 0 10px 24px rgba(31, 41, 55, 0.12);
+            animation: modelFloat 2.8s ease-in-out infinite;
+        }
+
+        .model-grid span:nth-child(2n) {
+            animation-delay: 0.5s;
+        }
+
+        .model-grid span:nth-child(3n) {
+            animation-delay: 1s;
+        }
+
+        .collaboration {
+            position: relative;
+            width: 280px;
+            height: 250px;
+        }
+
+        .person {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--deep-red);
+            border: 7px solid var(--white);
+            box-shadow: 0 8px 28px rgba(31, 41, 55, 0.18);
+        }
+
+        .person:nth-child(1) {
+            top: 0;
+            left: 110px;
+        }
+
+        .person:nth-child(2) {
+            bottom: 20px;
+            left: 10px;
+            background: var(--dark-gold);
+        }
+
+        .person:nth-child(3) {
+            bottom: 20px;
+            right: 10px;
+            background: var(--green);
+        }
+
+        .collaboration::before,
+        .collaboration::after {
+            content: "";
+            position: absolute;
+            height: 5px;
+            width: 150px;
+            top: 125px;
+            left: 65px;
+            background: #cbd5e1;
+            transform-origin: center;
+            z-index: -1;
+        }
+
+        .collaboration::before {
+            transform: rotate(30deg);
+        }
+
+        .collaboration::after {
+            transform: rotate(-30deg);
+        }
+
+        .publication {
+            position: relative;
+            width: 290px;
+            height: 280px;
+            display: grid;
+            place-items: center;
+        }
+
+        .paper {
+            width: 185px;
+            min-height: 225px;
+            padding: 24px 20px;
+            border-radius: 10px;
+            background: var(--white);
+            box-shadow: 0 20px 55px rgba(31, 41, 55, 0.18);
+            transform: rotate(-5deg);
+        }
+
+        .paper-line {
+            height: 8px;
+            margin-bottom: 11px;
+            border-radius: 8px;
+            background: #e5e7eb;
+        }
+
+        .paper-line.short {
+            width: 62%;
+        }
+
+        .paper-seal {
+            display: grid;
+            place-items: center;
+            width: 68px;
+            height: 68px;
+            margin: 23px auto 0;
+            border-radius: 50%;
+            background: var(--red);
+            color: var(--white);
+            font-size: 1.8rem;
+        }
+
+        .light-rays {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background:
+                repeating-conic-gradient(
+                    from 0deg,
+                    rgba(250, 204, 21, 0.18) 0deg 7deg,
+                    transparent 7deg 18deg
+                );
+            animation: rotate 18s linear infinite;
+            z-index: -1;
+        }
+
+        /* =========================
+           ENDING
+        ========================== */
+
+        .ending {
+            position: relative;
+            padding: 120px 24px;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    145deg,
+                    var(--night),
+                    var(--deep-red)
+                );
+            color: var(--white);
+            text-align: center;
+        }
+
+        .ending::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: 0.25;
+            background:
+                radial-gradient(
+                    circle at 50% 20%,
+                    var(--gold),
+                    transparent 35%
+                );
+        }
+
+        .ending-content {
+            position: relative;
+            z-index: 2;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .ending-symbol {
+            display: grid;
+            place-items: center;
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 28px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            color: var(--gold);
+            font-size: 3rem;
+        }
+
+        .ending h2 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2.4rem, 7vw, 5rem);
+        }
+
+        .ending p {
+            max-width: 680px;
+            margin: 24px auto 0;
+            color: #e5e7eb;
+            font-size: 1.13rem;
+            line-height: 1.85;
+        }
+
+        .ending-quote {
+            margin-top: 42px;
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--gold);
+            font-size: clamp(1.7rem, 4vw, 2.8rem);
+            font-style: italic;
+        }
+
+        .article-link {
+            display: inline-flex;
+            margin-top: 35px;
+            padding: 13px 22px;
+            border-radius: 999px;
+            background: var(--gold);
+            color: var(--night);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        footer {
+            padding: 22px;
+            background: #090f1c;
+            color: #cbd5e1;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* =========================
+           ANIMATIONS
+        ========================== */
+
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(8px);
+            }
+        }
+
+        @keyframes glow {
+            0%,
+            100% {
+                opacity: 0.65;
+                transform: scale(0.85);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.15);
+            }
+        }
+
+        @keyframes starMove {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 180px 180px;
+            }
+        }
+
+        @keyframes signal {
+            0%,
+            100% {
+                transform: scaleY(0.65);
+                opacity: 0.65;
+            }
+
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes ring {
+            0% {
+                width: 45px;
+                height: 45px;
+                opacity: 1;
+            }
+
+            100% {
+                width: 260px;
+                height: 260px;
+                opacity: 0;
+            }
+        }
+
+        @keyframes modelFloat {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 800px) {
+            .journey-line {
+                left: 35px;
+            }
+
+            .traveler {
+                margin-left: 0;
+                left: 0;
+                transform: scale(0.8);
+                transform-origin: left center;
+            }
+
+            .chapter {
+                grid-template-columns: 1fr;
+                gap: 28px;
+                padding: 65px 0 65px 75px;
+                min-height: auto;
+            }
+
+            .chapter:nth-of-type(odd) .chapter-card,
+            .chapter:nth-of-type(even) .chapter-card,
+            .chapter:nth-of-type(odd) .chapter-art,
+            .chapter:nth-of-type(even) .chapter-art {
+                grid-column: 1;
+                grid-row: auto;
+            }
+
+            .chapter-art {
+                min-height: 260px;
+            }
+
+            .path-point {
+                left: 35px;
+                top: 90px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .hero {
+                padding-inline: 18px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .primary-link,
+            .secondary-link {
+                width: 100%;
+            }
+
+            .journey {
+                width: calc(100% - 20px);
+            }
+
+            .chapter {
+                padding-left: 60px;
+            }
+
+            .journey-line,
+            .path-point {
+                left: 25px;
+            }
+
+            .chapter-card {
+                padding: 25px;
+            }
+
+            .traveler {
+                left: -11px;
+            }
+
+            .chapter-art {
+                transform: scale(0.88);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .chapter-card {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip-link" href="#journey">
+        Skip to the research journey
+    </a>
+
+    <header class="hero">
+        <div class="hero-stars" aria-hidden="true"></div>
+        <div class="hero-glow" aria-hidden="true"></div>
+
+        <div class="hero-content">
+            <span class="eyebrow">
+                A visual research story
+            </span>
+
+            <h1>
+                After All This Time
+                <span>Always</span>
+            </h1>
+
+            <p class="hero-description">
+                A journey through human-centered research, neurological
+                signals, attention-based learning, persistence,
+                collaboration, and publication.
+            </p>
+
+            <div class="hero-actions">
+                <a class="primary-link" href="#journey">
+                    Begin the journey
+                </a>
+
+                <a
+                    class="secondary-link"
+                    href="https://www.linkedin.com/pulse/after-all-time-always-shomoita-mitin-yf5rc/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Read the original article
+                </a>
+            </div>
+        </div>
+
+        <div class="scroll-indicator" aria-hidden="true">
+            Scroll
+            <span class="scroll-dot"></span>
+        </div>
+    </header>
+
+    <main id="journey">
+        <section class="intro" aria-labelledby="journey-heading">
+            <div class="intro-label">The path</div>
+
+            <h2 id="journey-heading">
+                One researcher. Five chapters. One meaningful destination.
+            </h2>
+
+            <p>
+                Follow the girl along the path as observation becomes a
+                question, the question becomes a model, and the model
+                becomes a published contribution.
+            </p>
+        </section>
+
+        <section class="journey" aria-label="Five-chapter research journey">
+            <div class="journey-line" aria-hidden="true"></div>
+
+            <div class="traveler" aria-hidden="true">
+                <div class="girl">
+                    <div class="girl-hair"></div>
+                    <div class="girl-head"></div>
+                    <div class="girl-body"></div>
+                    <div class="girl-dress"></div>
+                    <div class="girl-arm-left"></div>
+                    <div class="girl-arm-right"></div>
+                    <div class="girl-leg-left"></div>
+                    <div class="girl-leg-right"></div>
+                    <div class="wand"></div>
+                    <div class="wand-light"></div>
+                </div>
+            </div>
+
+            <!-- Chapter 1 -->
+            <article class="chapter">
+                <span class="path-point" aria-hidden="true"></span>
+
+                <div class="chapter-card">
+                    <span class="chapter-number">1</span>
+
+                    <p class="spell">Alohomora Gait</p>
+
+                    <h2>The human story behind the data</h2>
+
+                    <p>
+                        The journey begins in the lab, where neurological
+                        data is no longer only a collection of numbers.
+                        Each signal represents a person experiencing
+                        movement, uncertainty, and moments when the body
+                        suddenly refuses to move.
+                    </p>
+
+                    <ul class="chapter-list">
+                        <li>
+                            Observe healthy participants and people living
+                            with Parkinson’s disease.
+                        </li>
+                        <li>
+                            Understand the emotional and physical impact of
+                            Freezing of Gait.
+                        </li>
+                        <li>
+                            Ask whether data can distinguish healthy,
+                            Parkinson’s, and freezing-related patterns.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="chapter-art" aria-hidden="true">
+                    <div class="signal">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Chapter 2 -->
+            <article class="chapter">
+                <span class="path-point" aria-hidden="true"></span>
+
+                <div class="chapter-card">
+                    <span class="chapter-number">2</span>
+
+                    <p class="spell">Accio Attention</p>
+
+                    <h2>Finding movement inside stillness</h2>
+
+                    <p>
+                        A difficult question changes the direction of the
+                        research: can gait impairment be recognized while
+                        a person is resting, even when no visible movement
+                        is taking place?
+                    </p>
+
+                    <ul class="chapter-list">
+                        <li>
+                            Review previous neurological and machine-learning
+                            research.
+                        </li>
+                        <li>
+                            Test traditional machine-learning and
+                            deep-learning approaches.
+                        </li>
+                        <li>
+                            Shift toward a Transformer architecture with
+                            multiple self-attention layers.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="chapter-art" aria-hidden="true">
+                    <div class="attention-rings">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                        <div class="attention-center">
+                            Focus
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Chapter 3 -->
+            <article class="chapter">
+                <span class="path-point" aria-hidden="true"></span>
+
+                <div class="chapter-card">
+                    <span class="chapter-number">3</span>
+
+                    <p class="spell">Wingardium Leviosa</p>
+
+                    <h2>Raising the work beyond a baseline</h2>
+
+                    <p>
+                        The research is challenged to answer a harder
+                        question: what does this work contribute that is
+                        genuinely new? Instead of stopping at one model,
+                        the exploration expands across channels,
+                        configurations, and data modalities.
+                    </p>
+
+                    <ul class="chapter-list">
+                        <li>
+                            Reconsider assumptions and expected outcomes.
+                        </li>
+                        <li>
+                            Vary the number of EEG channels and input
+                            modalities.
+                        </li>
+                        <li>
+                            Develop and evaluate twelve separate model
+                            configurations.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="chapter-art" aria-hidden="true">
+                    <div class="model-grid">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>6</span>
+                        <span>7</span>
+                        <span>8</span>
+                        <span>9</span>
+                        <span>10</span>
+                        <span>11</span>
+                        <span>12</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Chapter 4 -->
+            <article class="chapter">
+                <span class="path-point" aria-hidden="true"></span>
+
+                <div class="chapter-card">
+                    <span class="chapter-number">4</span>
+
+                    <p class="spell">Expecto Patronum</p>
+
+                    <h2>Strength through collaboration</h2>
+
+                    <p>
+                        Research becomes stronger when it is examined by
+                        others. Mentors, co-authors, scholars, and reviewers
+                        reveal blind spots that are difficult to see from
+                        inside the work.
+                    </p>
+
+                    <ul class="chapter-list">
+                        <li>
+                            Accept thoughtful criticism as part of rigorous
+                            research.
+                        </li>
+                        <li>
+                            Refine the clarity, methodology, and impact of
+                            the work.
+                        </li>
+                        <li>
+                            Recognize collaboration as protection against
+                            uncertainty and unseen weaknesses.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="chapter-art" aria-hidden="true">
+                    <div class="collaboration">
+                        <div class="person"></div>
+                        <div class="person"></div>
+                        <div class="person"></div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Chapter 5 -->
+            <article class="chapter">
+                <span class="path-point" aria-hidden="true"></span>
+
+                <div class="chapter-card">
+                    <span class="chapter-number">5</span>
+
+                    <p class="spell">Lumos Maxima</p>
+
+                    <h2>Light after uncertainty</h2>
+
+                    <p>
+                        After two and a half years of uncertainty,
+                        experimentation, mentorship, and persistence, the
+                        research reaches publication. The outcome represents
+                        more than a paper; it marks resilience, growth, and
+                        the people who helped illuminate the path.
+                    </p>
+
+                    <ul class="chapter-list">
+                        <li>
+                            Continue through moments of isolation and doubt.
+                        </li>
+                        <li>
+                            Allow mentorship and collaboration to provide
+                            direction.
+                        </li>
+                        <li>
+                            Celebrate publication as both a scientific and
+                            personal milestone.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="chapter-art" aria-hidden="true">
+                    <div class="publication">
+                        <div class="light-rays"></div>
+
+                        <div class="paper">
+                            <div class="paper-line"></div>
+                            <div class="paper-line"></div>
+                            <div class="paper-line short"></div>
+                            <div class="paper-line"></div>
+                            <div class="paper-line short"></div>
+
+                            <div class="paper-seal">
+                                ✓
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="ending" aria-labelledby="ending-heading">
+            <div class="ending-content">
+                <div class="ending-symbol" aria-hidden="true">
+                    ✦
+                </div>
+
+                <h2 id="ending-heading">
+                    The destination was never reached alone.
+                </h2>
+
+                <p>
+                    It was shaped by the people behind the data, the mentors
+                    who redirected the work, the collaborators who
+                    strengthened it, and the persistence required to keep
+                    walking when the path was unclear.
+                </p>
+
+                <div class="ending-quote">
+                    After all this time: Always.
+                </div>
+
+                <a
+                    class="article-link"
+                    href="https://www.linkedin.com/pulse/after-all-time-always-shomoita-mitin-yf5rc/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Read the full article on LinkedIn
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        Visual research journey by Shomoita Mitin
+    </footer>
+
+    <script>
+        "use strict";
+
+        const cards = document.querySelectorAll(".chapter-card");
+        const traveler = document.querySelector(".traveler");
+        const chapters = document.querySelectorAll(".chapter");
+
+        const prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        /*
+         * Reveal each chapter card as it enters the viewport.
+         */
+        if ("IntersectionObserver" in window) {
+            const cardObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("visible");
+                            cardObserver.unobserve(entry.target);
+                        }
+                    });
+                },
+                {
+                    threshold: 0.22
+                }
+            );
+
+            cards.forEach((card) => {
+                cardObserver.observe(card);
+            });
+        } else {
+            cards.forEach((card) => {
+                card.classList.add("visible");
+            });
+        }
+
+        /*
+         * Change the girl's pose slightly as she moves through
+         * different chapters.
+         */
+        if (!prefersReducedMotion && "IntersectionObserver" in window) {
+            const chapterObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (!entry.isIntersecting) {
+                            return;
+                        }
+
+                        const chapterIndex = Array.from(chapters).indexOf(
+                            entry.target
+                        );
+
+                        const direction =
+                            chapterIndex % 2 === 0 ? 1 : -1;
+
+                        traveler.style.transform =
+                            `translateX(${direction * 7}px) rotate(${direction * 2}deg)`;
+                    });
+                },
+                {
+                    threshold: 0.55
+                }
+            );
+
+            chapters.forEach((chapter) => {
+                chapterObserver.observe(chapter);
+            });
+        }
+
+        /*
+         * Improve keyboard navigation after clicking the
+         * "Begin the journey" link.
+         */
+        const beginLink = document.querySelector(".primary-link");
+        const journeyHeading = document.getElementById("journey-heading");
+
+        beginLink.addEventListener("click", () => {
+            journeyHeading.setAttribute("tabindex", "-1");
+
+            window.setTimeout(() => {
+                journeyHeading.focus();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
