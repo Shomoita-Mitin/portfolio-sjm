@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Professional Experience Flow</title>
+
+    <style>
+        :root {
+            --accent-red: #c8102e;
+            --accent-red-dark: #991b1b;
+            --accent-soft: #fff1f2;
+            --text-dark: #1f2937;
+            --text-medium: #475569;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+            --track: #e5e7eb;
+            --focus: #2563eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 22px 16px;
+            background: transparent;
+            color: var(--text-dark);
+            font-family:
+                "Nunito",
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                Arial,
+                sans-serif;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .experience-section {
+            width: 100%;
+            max-width: 1040px;
+            margin: 0 auto;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .flow-shell {
+            position: relative;
+            min-height: 720px;
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    circle at center,
+                    #ffffff 0%,
+                    #ffffff 44%,
+                    #f8fafc 100%
+                );
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            box-shadow: 0 14px 38px rgba(15, 23, 42, 0.08);
+        }
+
+        .flow-stage {
+            position: relative;
+            width: min(700px, 92vw);
+            height: min(700px, 92vw);
+            min-width: 650px;
+            min-height: 650px;
+            margin: 4px auto 0;
+        }
+
+        .flow-ring {
+            position: absolute;
+            inset: 92px;
+            border: 4px solid var(--track);
+            border-radius: 50%;
+        }
+
+        .flow-ring-progress {
+            position: absolute;
+            inset: 92px;
+            border: 4px solid transparent;
+            border-top-color: var(--accent-red);
+            border-right-color: var(--accent-red);
+            border-radius: 50%;
+            transform: rotate(-45deg);
+            animation: rotateFlow 12s linear infinite;
+        }
+
+        .flow-dot {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-red);
+            border: 5px solid #ffffff;
+            border-radius: 50%;
+            box-shadow:
+                0 0 0 3px rgba(200, 16, 46, 0.16),
+                0 4px 12px rgba(200, 16, 46, 0.25);
+            transform-origin: 0 270px;
+            animation: orbitDot 12s linear infinite;
+            z-index: 5;
+        }
+
+        .flow-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: flex;
+            width: 370px;
+            height: 370px;
+            align-items: center;
+            justify-content: center;
+            padding: 34px;
+            overflow: hidden;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid var(--border-light);
+            border-radius: 50%;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+            transform: translate(-50%, -50%);
+            z-index: 3;
+        }
+
+        .center-content {
+            display: grid;
+            width: 100%;
+            max-width: 290px;
+            align-content: center;
+            justify-items: center;
+            animation: contentIn 0.42s ease;
+        }
+
+        .role-figure {
+            width: 88px;
+            height: 88px;
+            margin-bottom: 4px;
+        }
+
+        .role-figure svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .figure-line {
+            fill: none;
+            stroke: var(--accent-red);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .figure-fill {
+            fill: var(--accent-soft);
+            stroke: var(--accent-red);
+            stroke-width: 3;
+        }
+
+        .figure-detail {
+            fill: none;
+            stroke: var(--text-medium);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .center-role {
+            margin: 0;
+            color: var(--text-dark);
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .center-organization {
+            margin: 4px 0 0;
+            color: var(--text-medium);
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .center-date {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 5px 9px;
+            color: var(--accent-red-dark);
+            background: var(--accent-soft);
+            border: 1px solid #fecdd3;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .center-description {
+            max-width: 270px;
+            margin: 10px auto 0;
+            color: var(--text-muted);
+            font-size: 12.5px;
+            line-height: 1.45;
+            text-wrap: balance;
+        }
+
+        .flow-node {
+            position: absolute;
+            display: flex;
+            width: 180px;
+            min-height: 86px;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            text-align: center;
+            color: var(--text-medium);
+            background: var(--surface);
+            border: 2px solid var(--border-light);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            cursor: pointer;
+            z-index: 6;
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                background-color 0.25s ease,
+                box-shadow 0.25s ease,
+                color 0.25s ease;
+        }
+
+        .flow-node:hover {
+            border-color: #fda4af;
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+        }
+
+        .flow-node:focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 4px;
+        }
+
+        .flow-node.active {
+            color: var(--accent-red-dark);
+            background: var(--accent-soft);
+            border-color: var(--accent-red);
+            box-shadow:
+                0 0 0 6px rgba(200, 16, 46, 0.08),
+                0 14px 32px rgba(15, 23, 42, 0.14);
+        }
+
+        .node-role {
+            display: block;
+            font-size: 15px;
+            font-weight: 900;
+            line-height: 1.3;
+        }
+
+        .node-date {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .node-top {
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .node-top:hover,
+        .node-top.active {
+            transform: translateX(-50%) scale(1.06);
+        }
+
+        .node-right {
+            top: 50%;
+            right: 2px;
+            transform: translateY(-50%);
+        }
+
+        .node-right:hover,
+        .node-right.active {
+            transform: translateY(-50%) scale(1.06);
+        }
+
+        .node-bottom {
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .node-bottom:hover,
+        .node-bottom.active {
+            transform: translateX(-50%) scale(1.06);
+        }
+
+        .node-left {
+            top: 50%;
+            left: 2px;
+            transform: translateY(-50%);
+        }
+
+        .node-left:hover,
+        .node-left.active {
+            transform: translateY(-50%) scale(1.06);
+        }
+
+        .flow-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: -6px 0 0;
+            padding: 0 20px 24px;
+        }
+
+        .control-button {
+            min-width: 120px;
+            padding: 10px 16px;
+            color: var(--text-dark);
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition:
+                border-color 0.2s ease,
+                background-color 0.2s ease;
+        }
+
+        .control-button:hover {
+            background: var(--surface-soft);
+            border-color: #fda4af;
+        }
+
+        .control-button:focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 3px;
+        }
+
+        .portfolio-footer {
+            padding: 19px 12px 4px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .portfolio-footer span {
+            color: var(--accent-red);
+            font-weight: 900;
+        }
+
+        .flow-shell.paused .flow-ring-progress,
+        .flow-shell.paused .flow-dot {
+            animation-play-state: paused;
+        }
+
+        @keyframes rotateFlow {
+            from {
+                transform: rotate(-45deg);
+            }
+
+            to {
+                transform: rotate(315deg);
+            }
+        }
+
+        @keyframes orbitDot {
+            from {
+                transform: rotate(0deg) translateX(-50%);
+            }
+
+            to {
+                transform: rotate(360deg) translateX(-50%);
+            }
+        }
+
+        @keyframes contentIn {
+            from {
+                opacity: 0;
+                transform: translateY(7px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 760px) {
+            .flow-shell {
+                min-height: 660px;
+                overflow-x: auto;
+            }
+
+            .flow-stage {
+                transform: scale(0.88);
+                transform-origin: top center;
+            }
+
+            .flow-controls {
+                margin-top: -68px;
+            }
+        }
+
+        @media (max-width: 540px) {
+            body {
+                padding: 14px 10px;
+            }
+
+            .flow-shell {
+                min-height: 585px;
+                border-radius: 18px;
+            }
+
+            .flow-stage {
+                transform: scale(0.72);
+                margin-top: -8px;
+            }
+
+            .flow-controls {
+                margin-top: -150px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .flow-ring-progress,
+            .flow-dot {
+                animation: none;
+            }
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <p
+        class="visually-hidden"
+        id="experience-heading"
+        role="heading"
+        aria-level="2"
+    >
+        Professional Experience
+    </p>
+
+    <section
+        class="experience-section"
+        aria-labelledby="experience-heading"
+    >
+        <div class="flow-shell" id="flow-shell">
+            <div class="flow-stage">
+                <div class="flow-ring" aria-hidden="true"></div>
+                <div class="flow-ring-progress" aria-hidden="true"></div>
+                <div class="flow-dot" aria-hidden="true"></div>
+
+                <button
+                    class="flow-node node-top active"
+                    type="button"
+                    data-index="0"
+                    aria-pressed="true"
+                    aria-controls="experience-details"
+                >
+                    <span>
+                        <span class="node-role">Software Engineer</span>
+                        <span class="node-date">May 2026 – Present</span>
+                    </span>
+                </button>
+
+                <button
+                    class="flow-node node-right"
+                    type="button"
+                    data-index="1"
+                    aria-pressed="false"
+                    aria-controls="experience-details"
+                >
+                    <span>
+                        <span class="node-role">System Developer</span>
+                        <span class="node-date">Dec 2024 – May 2026</span>
+                    </span>
+                </button>
+
+                <button
+                    class="flow-node node-bottom"
+                    type="button"
+                    data-index="2"
+                    aria-pressed="false"
+                    aria-controls="experience-details"
+                >
+                    <span>
+                        <span class="node-role">Research Assistant</span>
+                        <span class="node-date">May 2023 – Dec 2024</span>
+                    </span>
+                </button>
+
+                <button
+                    class="flow-node node-left"
+                    type="button"
+                    data-index="3"
+                    aria-pressed="false"
+                    aria-controls="experience-details"
+                >
+                    <span>
+                        <span class="node-role">Assistant Professor</span>
+                        <span class="node-date">Jan 2022 – Dec 2022</span>
+                    </span>
+                </button>
+
+                <div
+                    class="flow-center"
+                    id="experience-details"
+                >
+                    <div class="center-content" id="center-content"></div>
+                </div>
+            </div>
+
+            <div class="flow-controls">
+                <button
+                    class="control-button"
+                    id="previous-button"
+                    type="button"
+                >
+                    Previous
+                </button>
+
+                <button
+                    class="control-button"
+                    id="pause-button"
+                    type="button"
+                    aria-pressed="false"
+                >
+                    Pause flow
+                </button>
+
+                <button
+                    class="control-button"
+                    id="next-button"
+                    type="button"
+                >
+                    Next
+                </button>
+            </div>
+        </div>
+
+        <footer class="portfolio-footer">
+            Designed &amp; Developed ©
+            <span>Shomoita Jahid Mitin</span>
+        </footer>
+    </section>
+
+    <script>
+        "use strict";
+
+        const figures = {
+            softwareEngineer: `
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                    <circle class="figure-fill" cx="50" cy="18" r="10"></circle>
+                    <path class="figure-line" d="M41 17 Q50 4 59 17"></path>
+                    <path class="figure-line" d="M50 28 L50 57"></path>
+                    <path class="figure-line" d="M50 37 L31 47"></path>
+                    <path class="figure-line" d="M50 38 L69 47"></path>
+                    <path class="figure-line" d="M50 57 L38 82"></path>
+                    <path class="figure-line" d="M50 57 L63 82"></path>
+                    <rect class="figure-detail" x="66" y="40" width="25" height="18" rx="2"></rect>
+                    <path class="figure-detail" d="M70 63 H88"></path>
+                    <path class="figure-detail" d="M79 58 V63"></path>
+                </svg>
+            `,
+            systemDeveloper: `
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                    <circle class="figure-fill" cx="48" cy="17" r="10"></circle>
+                    <path class="figure-line" d="M39 16 Q48 3 57 16"></path>
+                    <path class="figure-line" d="M48 27 L48 57"></path>
+                    <path class="figure-line" d="M48 36 L29 30"></path>
+                    <path class="figure-line" d="M48 37 L69 31"></path>
+                    <path class="figure-line" d="M48 57 L36 82"></path>
+                    <path class="figure-line" d="M48 57 L61 82"></path>
+                    <circle class="figure-detail" cx="23" cy="28" r="7"></circle>
+                    <path class="figure-detail" d="M23 18 V14 M23 42 V38 M13 28 H9 M37 28 H33"></path>
+                    <circle class="figure-detail" cx="77" cy="29" r="8"></circle>
+                    <path class="figure-detail" d="M77 17 V13 M77 45 V41 M65 29 H61 M93 29 H89"></path>
+                </svg>
+            `,
+            researchAssistant: `
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                    <circle class="figure-fill" cx="48" cy="17" r="10"></circle>
+                    <path class="figure-line" d="M39 16 Q48 3 57 16"></path>
+                    <path class="figure-line" d="M48 27 L48 57"></path>
+                    <path class="figure-line" d="M48 36 L29 46"></path>
+                    <path class="figure-line" d="M48 37 L67 45"></path>
+                    <path class="figure-line" d="M48 57 L36 82"></path>
+                    <path class="figure-line" d="M48 57 L61 82"></path>
+                    <path class="figure-detail" d="M71 32 L82 55 H60 Z"></path>
+                    <path class="figure-detail" d="M67 43 H76"></path>
+                    <circle class="figure-detail" cx="24" cy="49" r="4"></circle>
+                    <circle class="figure-detail" cx="18" cy="59" r="4"></circle>
+                    <circle class="figure-detail" cx="29" cy="63" r="4"></circle>
+                    <path class="figure-detail" d="M24 53 L20 56 M22 60 L26 62"></path>
+                </svg>
+            `,
+            professor: `
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                    <circle class="figure-fill" cx="42" cy="18" r="10"></circle>
+                    <path class="figure-line" d="M33 17 Q42 4 51 17"></path>
+                    <path class="figure-line" d="M42 28 L42 59"></path>
+                    <path class="figure-line" d="M42 38 L24 48"></path>
+                    <path class="figure-line" d="M42 38 L64 25"></path>
+                    <path class="figure-line" d="M42 59 L30 83"></path>
+                    <path class="figure-line" d="M42 59 L55 83"></path>
+                    <rect class="figure-detail" x="66" y="16" width="27" height="34" rx="2"></rect>
+                    <path class="figure-detail" d="M71 24 H87 M71 31 H85 M71 38 H88"></path>
+                </svg>
+            `
+        };
+
+        const experiences = [
+            {
+                role: "Software Engineer",
+                organization: "University of South Dakota",
+                date: "May 2026 – Present",
+                figure: figures.softwareEngineer,
+                description:
+                    "Developing accessible web experiences, integrations, reports, and automated solutions that support university services."
+            },
+            {
+                role: "System Developer",
+                organization: "University of South Dakota",
+                date: "December 2024 – May 2026",
+                figure: figures.systemDeveloper,
+                description:
+                    "Built and maintained applications, integrations, institutional reports, content systems, and technology workflows."
+            },
+            {
+                role: "Research Assistant",
+                organization: "University of South Dakota",
+                date: "May 2023 – December 2024",
+                figure: figures.researchAssistant,
+                description:
+                    "Collected research data, cleaned and transformed datasets, and trained machine-learning agents to detect freezing of gait (FOG)."
+            },
+            {
+                role: "Assistant Professor",
+                organization: "Asian University of Bangladesh",
+                date: "January 2022 – December 2022",
+                figure: figures.professor,
+                description:
+                    "Taught computing courses, guided students through technical concepts, prepared materials, and supported curriculum development."
+            }
+        ];
+
+        const nodeButtons = Array.from(
+            document.querySelectorAll(".flow-node")
+        );
+
+        const centerContent =
+            document.getElementById("center-content");
+
+        const flowShell =
+            document.getElementById("flow-shell");
+
+        const pauseButton =
+            document.getElementById("pause-button");
+
+        const previousButton =
+            document.getElementById("previous-button");
+
+        const nextButton =
+            document.getElementById("next-button");
+
+        let activeIndex = 0;
+        let isPaused = false;
+        let autoFlowTimer = null;
+
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function showExperience(index) {
+            activeIndex =
+                (index + experiences.length) % experiences.length;
+
+            const experience = experiences[activeIndex];
+
+            nodeButtons.forEach((button, buttonIndex) => {
+                const isActive = buttonIndex === activeIndex;
+
+                button.classList.toggle("active", isActive);
+                button.setAttribute(
+                    "aria-pressed",
+                    String(isActive)
+                );
+            });
+
+            centerContent.innerHTML = `
+                <div class="center-content">
+                    <div class="role-figure">
+                        ${experience.figure}
+                    </div>
+
+                    <p class="center-role">
+                        ${escapeHtml(experience.role)}
+                    </p>
+
+                    <p class="center-organization">
+                        ${escapeHtml(experience.organization)}
+                    </p>
+
+                    <span class="center-date">
+                        ${escapeHtml(experience.date)}
+                    </span>
+
+                    <p class="center-description">
+                        ${escapeHtml(experience.description)}
+                    </p>
+                </div>
+            `;
+        }
+
+        function startAutoFlow() {
+            window.clearInterval(autoFlowTimer);
+
+            if (!isPaused) {
+                autoFlowTimer = window.setInterval(() => {
+                    showExperience(activeIndex + 1);
+                }, 3000);
+            }
+        }
+
+        function pauseFlow() {
+            isPaused = true;
+            flowShell.classList.add("paused");
+            pauseButton.setAttribute("aria-pressed", "true");
+            pauseButton.textContent = "Resume flow";
+            startAutoFlow();
+        }
+
+        nodeButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                showExperience(Number(button.dataset.index));
+                pauseFlow();
+            });
+        });
+
+        previousButton.addEventListener("click", () => {
+            showExperience(activeIndex - 1);
+            pauseFlow();
+        });
+
+        nextButton.addEventListener("click", () => {
+            showExperience(activeIndex + 1);
+            pauseFlow();
+        });
+
+        pauseButton.addEventListener("click", () => {
+            isPaused = !isPaused;
+
+            flowShell.classList.toggle("paused", isPaused);
+            pauseButton.setAttribute(
+                "aria-pressed",
+                String(isPaused)
+            );
+
+            pauseButton.textContent =
+                isPaused ? "Resume flow" : "Pause flow";
+
+            startAutoFlow();
+        });
+
+        flowShell.addEventListener("focusin", pauseFlow);
+
+        showExperience(0);
+        startAutoFlow();
+    </script>
+</body>
+</html>
