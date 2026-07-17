@@ -1,14 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WCAG Accessibility Trainer</title>
 
     <style>
@@ -51,10 +45,29 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             padding: 30px;
             width: 100%;
-            max-width: 500px;
+            max-width: 560px;
         }
 
-        .header {
+        .trainer-intro {
+            margin-bottom: 22px;
+        }
+
+        .trainer-title {
+            color: var(--text-dark);
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.25;
+            margin: 0 0 5px;
+        }
+
+        .trainer-credit {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .scenario-header {
             margin-bottom: 20px;
         }
 
@@ -70,10 +83,11 @@
             letter-spacing: 0.05em;
         }
 
-        h1 {
+        .module-title {
             color: var(--text-dark);
             margin: 12px 0 6px;
             font-size: 24px;
+            font-weight: 800;
             line-height: 1.3;
         }
 
@@ -87,12 +101,10 @@
         .preview-box {
             border: 2px dashed var(--border-light);
             border-radius: 12px;
-            padding: 30px 20px;
+            padding: 28px 20px;
             text-align: center;
             margin-bottom: 25px;
-            transition:
-                background-color 0.4s ease,
-                border-color 0.4s ease;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
         }
 
         .preview-text {
@@ -105,6 +117,88 @@
 
         .preview-text a {
             font-weight: 700;
+        }
+
+        .preview-copy {
+            font-size: 15px;
+            font-weight: 500;
+            margin: 5px 0 0;
+        }
+
+        .simulated-title {
+            display: block;
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin: 0 0 8px;
+        }
+
+        .simulated-subtitle {
+            display: block;
+            font-size: 18px;
+            font-weight: 750;
+            line-height: 1.3;
+            margin: 0 0 8px;
+        }
+
+        .structure-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            text-align: left;
+            margin: 8px 0;
+        }
+
+        .level-label {
+            flex: 0 0 auto;
+            min-width: 38px;
+            background: #e2e8f0;
+            color: #334155;
+            border-radius: 6px;
+            padding: 3px 7px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 12px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .structure-text-main {
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .structure-text-sub {
+            font-size: 17px;
+            font-weight: 750;
+            line-height: 1.3;
+        }
+
+        .missing-label {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .icon-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #1e2937;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .sample-image {
+            display: block;
+            width: 100%;
+            max-width: 260px;
+            height: auto;
+            margin: 0 auto;
+            border-radius: 8px;
         }
 
         fieldset {
@@ -140,9 +234,7 @@
             text-align: left;
             cursor: pointer;
             color: var(--text-dark);
-            transition:
-                border-color 0.2s ease,
-                background-color 0.2s ease,
+            transition: border-color 0.2s ease, background-color 0.2s ease,
                 box-shadow 0.2s ease;
         }
 
@@ -152,7 +244,8 @@
         }
 
         .fix-btn:focus-visible,
-        .action-btn:focus-visible {
+        .action-btn:focus-visible,
+        .icon-link:focus-visible {
             outline: 3px solid var(--focus);
             outline-offset: 3px;
         }
@@ -239,7 +332,6 @@
                 opacity: 0;
                 transform: translateY(5px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -251,12 +343,16 @@
                 padding: 22px;
             }
 
-            h1 {
+            .trainer-title {
+                font-size: 24px;
+            }
+
+            .module-title {
                 font-size: 21px;
             }
 
             .preview-box {
-                padding: 25px 15px;
+                padding: 24px 15px;
             }
         }
 
@@ -274,9 +370,14 @@
 </head>
 
 <body>
-    <main class="trainer-card" aria-labelledby="module-title">
-         <h3>Play and Learn</h3>
-        <h4>Designed and Developed © Shomoita Jahid Mitin</h4>
+    <main class="trainer-card" aria-labelledby="trainer-name">
+        <div class="trainer-intro">
+            <p class="trainer-title" id="trainer-name">Play and Learn</p>
+            <p class="trainer-credit">
+                Designed and Developed © Shomoita Jahid Mitin
+            </p>
+        </div>
+
         <div id="module-container"></div>
     </main>
 
@@ -295,8 +396,7 @@
                 previewText: "Crucial warning: Read this text",
                 options: [
                     {
-                        text:
-                            "Change the background to dark gray and use light red text",
+                        text: "Use light red text on a dark gray background",
                         bg: "#22252A",
                         color: "#FFB3B3",
                         correct: true,
@@ -304,8 +404,7 @@
                             "Correct. The light text creates much stronger contrast against the dark background."
                     },
                     {
-                        text:
-                            "Keep the brown background and change the text to dark orange",
+                        text: "Use dark orange text on the brown background",
                         bg: "#5C4033",
                         color: "#D97706",
                         correct: false,
@@ -313,8 +412,7 @@
                             "Not quite. Dark orange against dark brown still provides weak visual contrast."
                     },
                     {
-                        text:
-                            "Change the background to light tan and use dark red text",
+                        text: "Use dark red text on a light tan background",
                         bg: "#F5F5DC",
                         color: "#660000",
                         correct: true,
@@ -335,9 +433,7 @@
                     'To read our company documentation, select <a href="https://example.com/documentation">here</a>.',
                 options: [
                     {
-                        text:
-                            "Change the link text to “Company PDF documentation”",
-                        isTextFix: true,
+                        text: "Change the link text to “Company PDF documentation”",
                         newHtml:
                             'Download our <a href="https://example.com/documentation">company PDF documentation</a>.',
                         correct: true,
@@ -345,14 +441,157 @@
                             "Correct. The descriptive link text explains the destination and purpose of the link."
                     },
                     {
-                        text:
-                            "Keep the word “here,” but make it bold and underlined",
-                        isTextFix: true,
+                        text: "Keep “here,” but make it bold and underlined",
                         newHtml:
-                            'To read our company documentation, select <a href="https://example.com/documentation" style="font-weight:700; text-decoration:underline;">here</a>.',
+                            'To read our company documentation, select <a href="https://example.com/documentation" style="font-weight:700;text-decoration:underline;">here</a>.',
                         correct: false,
                         feedback:
                             "Not quite. Visual styling does not make the link purpose clearer to screen-reader users."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                badge: "WCAG 2.1 — 1.3.1 Info and Relationships",
+                title: "Page Missing a Main Heading",
+                description:
+                    "The preview simulates a page title that looks prominent but is not programmatically identified as the page’s main heading.",
+                initialBg: "#F8FAFC",
+                initialColor: "#1E2937",
+                previewHtml:
+                    '<div class="structure-row"><span class="level-label missing-label">None</span><span class="structure-text-main">Student Resources</span></div><p class="preview-copy">Find advising, registration, and academic support information.</p>',
+                options: [
+                    {
+                        text: "Identify “Student Resources” as the page’s H1 in the CMS",
+                        newHtml:
+                            '<div class="structure-row"><span class="level-label">H1</span><span class="structure-text-main">Student Resources</span></div><p class="preview-copy">Find advising, registration, and academic support information.</p>',
+                        correct: true,
+                        feedback:
+                            "Correct. The visible page title is now identified as the page’s main H1."
+                    },
+                    {
+                        text: "Only increase its font size and weight",
+                        newHtml:
+                            '<div class="structure-row"><span class="level-label missing-label">None</span><span class="structure-text-main" style="font-size:28px;">Student Resources</span></div><p class="preview-copy">Find advising, registration, and academic support information.</p>',
+                        correct: false,
+                        feedback:
+                            "Not quite. Visual size and weight do not provide heading semantics."
+                    }
+                ]
+            },
+            {
+                id: 4,
+                badge: "WCAG 2.1 — 1.3.1 Info and Relationships",
+                title: "More Than One H1",
+                description:
+                    "This preview uses labels to simulate the page outline without adding real heading elements to the trainer itself.",
+                initialBg: "#F8FAFC",
+                initialColor: "#1E2937",
+                previewHtml:
+                    '<div class="structure-row"><span class="level-label">H1</span><span class="structure-text-main">Admissions</span></div><div class="structure-row"><span class="level-label missing-label">H1</span><span class="structure-text-sub">Application Requirements</span></div><p class="preview-copy">Review the documents needed to apply.</p>',
+                options: [
+                    {
+                        text: "Keep Admissions as H1 and set Application Requirements as H2",
+                        newHtml:
+                            '<div class="structure-row"><span class="level-label">H1</span><span class="structure-text-main">Admissions</span></div><div class="structure-row"><span class="level-label">H2</span><span class="structure-text-sub">Application Requirements</span></div><p class="preview-copy">Review the documents needed to apply.</p>',
+                        correct: true,
+                        feedback:
+                            "Correct. The page has one main H1 followed by an H2 section heading."
+                    },
+                    {
+                        text: "Set both titles as H2",
+                        newHtml:
+                            '<div class="structure-row"><span class="level-label missing-label">H2</span><span class="structure-text-main">Admissions</span></div><div class="structure-row"><span class="level-label">H2</span><span class="structure-text-sub">Application Requirements</span></div><p class="preview-copy">Review the documents needed to apply.</p>',
+                        correct: false,
+                        feedback:
+                            "Not quite. The page would no longer have a clear main H1."
+                    }
+                ]
+            },
+            {
+                id: 5,
+                badge: "WCAG 2.1 — 1.3.1 Heading Structure",
+                title: "Skipped Heading Level",
+                description:
+                    "Heading levels should communicate a logical outline. Avoid jumping from H1 directly to H3 when an H2 section is needed.",
+                initialBg: "#F8FAFC",
+                initialColor: "#1E2937",
+                previewHtml:
+                    '<div class="structure-row"><span class="level-label">H1</span><span class="structure-text-main">Financial Aid</span></div><div class="structure-row"><span class="level-label missing-label">H3</span><span class="structure-text-sub">Scholarships</span></div><p class="preview-copy">Explore available scholarship opportunities.</p>',
+                options: [
+                    {
+                        text: "Change Scholarships from H3 to H2",
+                        newHtml:
+                            '<div class="structure-row"><span class="level-label">H1</span><span class="structure-text-main">Financial Aid</span></div><div class="structure-row"><span class="level-label">H2</span><span class="structure-text-sub">Scholarships</span></div><p class="preview-copy">Explore available scholarship opportunities.</p>',
+                        correct: true,
+                        feedback:
+                            "Correct. The heading structure now moves logically from H1 to H2."
+                    },
+                    {
+                        text: "Change both titles to H3",
+                        newHtml:
+                            '<div class="structure-row"><span class="level-label missing-label">H3</span><span class="structure-text-main">Financial Aid</span></div><div class="structure-row"><span class="level-label">H3</span><span class="structure-text-sub">Scholarships</span></div><p class="preview-copy">Explore available scholarship opportunities.</p>',
+                        correct: false,
+                        feedback:
+                            "Not quite. Matching levels does not create a meaningful page hierarchy or main heading."
+                    }
+                ]
+            },
+            {
+                id: 6,
+                badge: "WCAG 2.1 — 1.1.1 Non-text Content",
+                title: "Image Missing Alternative Text",
+                description:
+                    "Informative images need alternative text that communicates the same essential information.",
+                initialBg: "#F8FAFC",
+                initialColor: "#1E2937",
+                previewHtml:
+                    '<svg class="sample-image" viewBox="0 0 260 110" role="img" aria-label="Sample campus parking map shown for the activity"><rect width="260" height="110" fill="#dbeafe"></rect><path d="M20 80 L80 25 L135 70 L205 20 L240 70" fill="none" stroke="#334155" stroke-width="8"></path><circle cx="80" cy="25" r="9" fill="#991b1b"></circle><text x="20" y="102" font-size="14" fill="#1e2937">Campus parking map</text></svg><p class="preview-copy">Current image alt text: missing</p>',
+                options: [
+                    {
+                        text: "Add concise alt text describing the map’s purpose",
+                        newHtml:
+                            '<svg class="sample-image" viewBox="0 0 260 110" role="img" aria-label="Map showing visitor parking near the student center"><rect width="260" height="110" fill="#dbeafe"></rect><path d="M20 80 L80 25 L135 70 L205 20 L240 70" fill="none" stroke="#334155" stroke-width="8"></path><circle cx="80" cy="25" r="9" fill="#991b1b"></circle><text x="20" y="102" font-size="14" fill="#1e2937">Campus parking map</text></svg><p class="preview-copy">Alt text: Map showing visitor parking near the student center</p>',
+                        correct: true,
+                        feedback:
+                            "Correct. The alternative text communicates the image’s meaningful content and purpose."
+                    },
+                    {
+                        text: "Use the alt text “image”",
+                        newHtml:
+                            '<svg class="sample-image" viewBox="0 0 260 110" role="img" aria-label="Image"><rect width="260" height="110" fill="#dbeafe"></rect><path d="M20 80 L80 25 L135 70 L205 20 L240 70" fill="none" stroke="#334155" stroke-width="8"></path><circle cx="80" cy="25" r="9" fill="#991b1b"></circle><text x="20" y="102" font-size="14" fill="#1e2937">Campus parking map</text></svg><p class="preview-copy">Alt text: Image</p>',
+                        correct: false,
+                        feedback:
+                            "Not quite. Generic alternative text does not explain the image’s content or purpose."
+                    }
+                ]
+            },
+            {
+                id: 7,
+                badge: "WCAG 2.1 — 2.4.4 Link Purpose",
+                title: "Icon Link Missing an Accessible Name",
+                description:
+                    "An icon-only link needs an accessible name that communicates its destination or action.",
+                initialBg: "#F8FAFC",
+                initialColor: "#1E2937",
+                previewHtml:
+                    '<a class="icon-link" href="https://example.com/search" aria-hidden="true" tabindex="-1">⌕</a><p class="preview-copy">The link has no accessible name.</p>',
+                options: [
+                    {
+                        text: "Add the accessible name “Search” to the link",
+                        newHtml:
+                            '<a class="icon-link" href="https://example.com/search" aria-label="Search">⌕</a><p class="preview-copy">Accessible name: Search</p>',
+                        correct: true,
+                        feedback:
+                            "Correct. The icon-only link now has a clear accessible name."
+                    },
+                    {
+                        text: "Add alt text directly to the link element",
+                        newHtml:
+                            '<a class="icon-link" href="https://example.com/search" data-alt="Search">⌕</a><p class="preview-copy">A link element does not use an alt attribute.</p>',
+                        correct: false,
+                        feedback:
+                            "Not quite. Links need descriptive text or an accessible name. The alt attribute applies to images, not link elements."
                     }
                 ]
             }
@@ -371,12 +610,12 @@
 
             container.innerHTML = `
                 <section aria-labelledby="module-title">
-                    <div class="header">
+                    <div class="scenario-header">
                         <span class="badge">${escapeHtml(data.badge)}</span>
 
-                        <h1 id="module-title" tabindex="-1">
+                        <p class="module-title" id="module-title" tabindex="-1">
                             ${escapeHtml(data.title)}
-                        </h1>
+                        </p>
 
                         <p class="description">
                             ${escapeHtml(data.description)}
@@ -386,29 +625,25 @@
                     <div
                         class="preview-box"
                         id="sandbox"
-                        style="background-color: ${data.initialBg};"
+                        style="background-color:${data.initialBg};"
                         aria-labelledby="preview-label"
                     >
                         <span id="preview-label" class="visually-hidden">
                             Example preview
                         </span>
 
-                        <p
+                        <div
                             class="preview-text"
                             id="sandbox-text"
-                            style="color: ${data.initialColor};"
+                            style="color:${data.initialColor};"
                         >
                             ${initialContent}
-                        </p>
+                        </div>
                     </div>
 
                     <fieldset>
                         <legend>Select the accessible fix:</legend>
-
-                        <div
-                            class="options-grid"
-                            id="options-field"
-                        ></div>
+                        <div class="options-grid" id="options-field"></div>
                     </fieldset>
 
                     <div
@@ -420,30 +655,23 @@
                         tabindex="-1"
                     ></div>
 
-                    <button
-                        class="action-btn"
-                        id="action-btn"
-                        type="button"
-                    >
+                    <button class="action-btn" id="action-btn" type="button">
                         Next WCAG principle
                     </button>
 
                     <p class="progress">
-                        Scenario ${currentModuleIndex + 1} of
-                        ${wcagScenarios.length}
+                        Scenario ${currentModuleIndex + 1} of ${wcagScenarios.length}
                     </p>
                 </section>
             `;
 
             const optionsField = document.getElementById("options-field");
 
-            data.options.forEach((option, index) => {
+            data.options.forEach((option) => {
                 const button = document.createElement("button");
-
                 button.type = "button";
                 button.className = "fix-btn";
                 button.textContent = option.text;
-                button.dataset.optionIndex = index;
 
                 button.addEventListener("click", function () {
                     evaluateChoice(option, button);
@@ -470,10 +698,7 @@
 
             allButtons.forEach((button) => {
                 button.disabled = true;
-                button.classList.remove(
-                    "selected-correct",
-                    "selected-error"
-                );
+                button.classList.remove("selected-correct", "selected-error");
             });
 
             if (option.bg) {
@@ -484,7 +709,7 @@
                 sandboxText.style.color = option.color;
             }
 
-            if (option.isTextFix && option.newHtml) {
+            if (option.newHtml) {
                 sandboxText.innerHTML = option.newHtml;
             }
 
@@ -493,13 +718,9 @@
             if (option.correct) {
                 clickedButton.classList.add("selected-correct");
                 clickedButton.setAttribute("aria-label", `${option.text}. Correct.`);
-
-                feedbackBox.className =
-                    "feedback-area feedback-success";
-
+                feedbackBox.className = "feedback-area feedback-success";
                 sandbox.style.borderStyle = "solid";
                 sandbox.style.borderColor = "#047857";
-
                 actionButton.style.display = "block";
 
                 window.setTimeout(() => {
@@ -507,14 +728,8 @@
                 }, 50);
             } else {
                 clickedButton.classList.add("selected-error");
-                clickedButton.setAttribute(
-                    "aria-label",
-                    `${option.text}. Incorrect.`
-                );
-
-                feedbackBox.className =
-                    "feedback-area feedback-error";
-
+                clickedButton.setAttribute("aria-label", `${option.text}. Incorrect.`);
+                feedbackBox.className = "feedback-area feedback-error";
                 sandbox.style.borderStyle = "solid";
                 sandbox.style.borderColor = "#DC2626";
 
@@ -526,7 +741,6 @@
                     allButtons.forEach((button) => {
                         button.disabled = false;
                     });
-
                     clickedButton.focus();
                 }, 1500);
             }
@@ -542,7 +756,6 @@
             renderModule();
 
             const title = document.getElementById("module-title");
-
             window.setTimeout(() => {
                 title.focus();
             }, 50);
