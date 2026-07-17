@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Interactive Experience Code Editor</title>
+
+    <style>
+        :root {
+            --accent-red: #c8102e;
+            --accent-red-dark: #991b1b;
+            --accent-soft: #fff1f2;
+            --text-dark: #1f2937;
+            --text-medium: #475569;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+            --focus: #2563eb;
+
+            --editor-bg: #1e1e1e;
+            --editor-sidebar: #181818;
+            --editor-activity: #202020;
+            --editor-tab: #252526;
+            --editor-tab-active: #1e1e1e;
+            --editor-border: #333333;
+            --editor-text: #d4d4d4;
+            --editor-muted: #858585;
+            --editor-line: #2a2d2e;
+            --editor-blue: #569cd6;
+            --editor-light-blue: #9cdcfe;
+            --editor-green: #6a9955;
+            --editor-string: #ce9178;
+            --editor-yellow: #dcdcaa;
+            --editor-purple: #c586c0;
+            --editor-class: #4ec9b0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px 14px;
+            background: transparent;
+            color: var(--text-dark);
+            font-family:
+                "Nunito",
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                Arial,
+                sans-serif;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .experience-code-section {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .role-button {
+            display: grid;
+            min-height: 162px;
+            justify-items: center;
+            align-content: center;
+            gap: 8px;
+            padding: 16px 12px;
+            color: var(--text-medium);
+            background: var(--surface);
+            border: 2px solid var(--border-light);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+            cursor: pointer;
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                background-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .role-button:hover {
+            transform: translateY(-4px);
+            border-color: #fda4af;
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.11);
+        }
+
+        .role-button:focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 4px;
+        }
+
+        .role-button.active {
+            color: var(--accent-red-dark);
+            background: var(--accent-soft);
+            border-color: var(--accent-red);
+            box-shadow:
+                0 0 0 5px rgba(200, 16, 46, 0.07),
+                0 14px 30px rgba(15, 23, 42, 0.11);
+        }
+
+        .role-figure {
+            width: 76px;
+            height: 76px;
+        }
+
+        .role-name {
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1.25;
+            text-align: center;
+        }
+
+        .role-date {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.3;
+            text-align: center;
+        }
+
+        .figure-line {
+            fill: none;
+            stroke: var(--accent-red);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .figure-fill {
+            fill: var(--accent-soft);
+            stroke: var(--accent-red);
+            stroke-width: 3;
+        }
+
+        .figure-detail {
+            fill: none;
+            stroke: var(--text-medium);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .editor-window {
+            overflow: hidden;
+            background: var(--editor-bg);
+            border: 1px solid #111111;
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+        }
+
+        .editor-titlebar {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            min-height: 42px;
+            padding: 0 14px;
+            color: #cccccc;
+            background: #181818;
+            border-bottom: 1px solid var(--editor-border);
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 7px;
+        }
+
+        .window-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+        }
+
+        .dot-red {
+            background: #ff5f57;
+        }
+
+        .dot-yellow {
+            background: #febc2e;
+        }
+
+        .dot-green {
+            background: #28c840;
+        }
+
+        .editor-window-title {
+            text-align: center;
+        }
+
+        .editor-actions {
+            color: #999999;
+            letter-spacing: 0.2em;
+        }
+
+        .editor-layout {
+            display: grid;
+            grid-template-columns: 48px 210px minmax(0, 1fr);
+            min-height: 610px;
+        }
+
+        .activity-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 22px;
+            padding-top: 18px;
+            color: #a0a0a0;
+            background: var(--editor-activity);
+            border-right: 1px solid var(--editor-border);
+        }
+
+        .activity-icon {
+            display: grid;
+            width: 30px;
+            height: 30px;
+            place-items: center;
+            font-family: Consolas, monospace;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .activity-icon.active {
+            color: #ffffff;
+            border-left: 2px solid var(--accent-red);
+        }
+
+        .explorer {
+            background: var(--editor-sidebar);
+            border-right: 1px solid var(--editor-border);
+            color: #cccccc;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        .explorer-title {
+            padding: 12px 14px 9px;
+            color: #bbbbbb;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .project-name {
+            padding: 7px 12px;
+            font-weight: 700;
+        }
+
+        .file-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .file-item {
+            width: 100%;
+            padding: 7px 10px 7px 28px;
+            color: #cccccc;
+            background: transparent;
+            border: 0;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .file-item:hover {
+            background: #2a2d2e;
+        }
+
+        .file-item.active {
+            background: #37373d;
+            color: #ffffff;
+        }
+
+        .file-item:focus-visible {
+            outline: 2px solid var(--focus);
+            outline-offset: -2px;
+        }
+
+        .editor-main {
+            min-width: 0;
+            background: var(--editor-bg);
+        }
+
+        .tab-bar {
+            display: flex;
+            min-height: 38px;
+            background: var(--editor-tab);
+            border-bottom: 1px solid var(--editor-border);
+        }
+
+        .editor-tab {
+            display: flex;
+            min-width: 180px;
+            align-items: center;
+            gap: 9px;
+            padding: 0 14px;
+            color: #ffffff;
+            background: var(--editor-tab-active);
+            border-top: 1px solid var(--accent-red);
+            border-right: 1px solid var(--editor-border);
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        .csharp-icon {
+            color: #9b4f96;
+            font-weight: 900;
+        }
+
+        .code-pane {
+            display: grid;
+            grid-template-columns: 54px minmax(0, 1fr);
+            padding: 16px 0 24px;
+            overflow-x: auto;
+            font-family:
+                Consolas,
+                "Courier New",
+                monospace;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .line-numbers {
+            padding-right: 14px;
+            color: var(--editor-muted);
+            text-align: right;
+            user-select: none;
+        }
+
+        .line-numbers span,
+        .code-lines span {
+            display: block;
+            min-height: 23.8px;
+            white-space: pre;
+        }
+
+        .code-lines {
+            min-width: 720px;
+            padding-right: 24px;
+            color: var(--editor-text);
+        }
+
+        .code-line.highlight {
+            background: var(--editor-line);
+        }
+
+        .syntax-keyword {
+            color: var(--editor-blue);
+        }
+
+        .syntax-class {
+            color: var(--editor-class);
+        }
+
+        .syntax-property {
+            color: var(--editor-light-blue);
+        }
+
+        .syntax-string {
+            color: var(--editor-string);
+        }
+
+        .syntax-comment {
+            color: var(--editor-green);
+        }
+
+        .syntax-method {
+            color: var(--editor-yellow);
+        }
+
+        .syntax-purple {
+            color: var(--editor-purple);
+        }
+
+        .status-bar {
+            display: flex;
+            min-height: 24px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            color: #ffffff;
+            background: var(--accent-red-dark);
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+        }
+
+        .status-group {
+            display: flex;
+            gap: 16px;
+        }
+
+        .portfolio-footer {
+            padding: 20px 12px 4px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .portfolio-footer span {
+            color: var(--accent-red);
+            font-weight: 900;
+        }
+
+        @media (max-width: 900px) {
+            .role-selector {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .editor-layout {
+                grid-template-columns: 44px minmax(0, 1fr);
+            }
+
+            .explorer {
+                display: none;
+            }
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 12px 8px;
+            }
+
+            .role-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .role-button {
+                grid-template-columns: 70px minmax(0, 1fr);
+                min-height: auto;
+                justify-items: start;
+                text-align: left;
+            }
+
+            .role-name,
+            .role-date {
+                text-align: left;
+            }
+
+            .editor-window {
+                border-radius: 14px;
+            }
+
+            .editor-layout {
+                grid-template-columns: 1fr;
+                min-height: 560px;
+            }
+
+            .activity-bar {
+                display: none;
+            }
+
+            .editor-titlebar {
+                grid-template-columns: auto 1fr;
+            }
+
+            .editor-actions {
+                display: none;
+            }
+
+            .code-pane {
+                font-size: 12px;
+            }
+
+            .editor-tab {
+                min-width: 160px;
+            }
+
+            .status-group:last-child {
+                display: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <p
+        class="visually-hidden"
+        id="experience-code-heading"
+        role="heading"
+        aria-level="2"
+    >
+        Professional experience shown as C sharp classes
+    </p>
+
+    <section
+        class="experience-code-section"
+        aria-labelledby="experience-code-heading"
+    >
+        <div
+            class="role-selector"
+            aria-label="Select a professional position"
+        >
+            <button
+                class="role-button active"
+                type="button"
+                data-index="0"
+                aria-pressed="true"
+                aria-controls="code-editor"
+            >
+                <svg
+                    class="role-figure"
+                    viewBox="0 0 100 100"
+                    aria-hidden="true"
+                >
+                    <circle class="figure-fill" cx="43" cy="18" r="9"></circle>
+                    <path class="figure-line" d="M35 17 Q43 5 51 17"></path>
+                    <path class="figure-line" d="M43 27 L43 57"></path>
+                    <path class="figure-line" d="M43 36 L27 45"></path>
+                    <path class="figure-line" d="M43 37 L60 46"></path>
+                    <path class="figure-line" d="M43 57 L32 80"></path>
+                    <path class="figure-line" d="M43 57 L55 80"></path>
+                    <rect class="figure-detail" x="60" y="40" width="28" height="19" rx="2"></rect>
+                    <path class="figure-detail" d="M63 64 H87"></path>
+                </svg>
+
+                <span>
+                    <span class="role-name">Software Engineer</span>
+                    <span class="role-date">May 2026 – Present</span>
+                </span>
+            </button>
+
+            <button
+                class="role-button"
+                type="button"
+                data-index="1"
+                aria-pressed="false"
+                aria-controls="code-editor"
+            >
+                <svg
+                    class="role-figure"
+                    viewBox="0 0 100 100"
+                    aria-hidden="true"
+                >
+                    <circle class="figure-fill" cx="43" cy="18" r="9"></circle>
+                    <path class="figure-line" d="M35 17 Q43 5 51 17"></path>
+                    <path class="figure-line" d="M43 27 L43 57"></path>
+                    <path class="figure-line" d="M43 36 L27 31"></path>
+                    <path class="figure-line" d="M43 37 L61 31"></path>
+                    <path class="figure-line" d="M43 57 L32 80"></path>
+                    <path class="figure-line" d="M43 57 L55 80"></path>
+                    <circle class="figure-detail" cx="73" cy="37" r="11"></circle>
+                    <path class="figure-detail" d="M73 20 V26 M73 48 V54 M56 37 H62 M84 37 H90"></path>
+                </svg>
+
+                <span>
+                    <span class="role-name">System Developer</span>
+                    <span class="role-date">Dec 2024 – May 2026</span>
+                </span>
+            </button>
+
+            <button
+                class="role-button"
+                type="button"
+                data-index="2"
+                aria-pressed="false"
+                aria-controls="code-editor"
+            >
+                <svg
+                    class="role-figure"
+                    viewBox="0 0 100 100"
+                    aria-hidden="true"
+                >
+                    <circle class="figure-fill" cx="42" cy="18" r="9"></circle>
+                    <path class="figure-line" d="M34 17 Q42 5 50 17"></path>
+                    <path class="figure-line" d="M42 27 L42 57"></path>
+                    <path class="figure-line" d="M42 36 L27 46"></path>
+                    <path class="figure-line" d="M42 37 L59 45"></path>
+                    <path class="figure-line" d="M42 57 L31 80"></path>
+                    <path class="figure-line" d="M42 57 L54 80"></path>
+                    <path class="figure-detail" d="M68 30 L81 56 H57 Z"></path>
+                    <circle class="figure-detail" cx="72" cy="46" r="3"></circle>
+                </svg>
+
+                <span>
+                    <span class="role-name">Research Assistant</span>
+                    <span class="role-date">May 2023 – Dec 2024</span>
+                </span>
+            </button>
+
+            <button
+                class="role-button"
+                type="button"
+                data-index="3"
+                aria-pressed="false"
+                aria-controls="code-editor"
+            >
+                <svg
+                    class="role-figure"
+                    viewBox="0 0 100 100"
+                    aria-hidden="true"
+                >
+                    <circle class="figure-fill" cx="39" cy="18" r="9"></circle>
+                    <path class="figure-line" d="M31 17 Q39 5 47 17"></path>
+                    <path class="figure-line" d="M39 27 L39 57"></path>
+                    <path class="figure-line" d="M39 36 L23 45"></path>
+                    <path class="figure-line" d="M39 37 L60 25"></path>
+                    <path class="figure-line" d="M39 57 L28 80"></path>
+                    <path class="figure-line" d="M39 57 L51 80"></path>
+                    <rect class="figure-detail" x="62" y="18" width="29" height="35" rx="2"></rect>
+                    <path class="figure-detail" d="M68 27 H85 M68 35 H84 M68 43 H80"></path>
+                </svg>
+
+                <span>
+                    <span class="role-name">Assistant Professor</span>
+                    <span class="role-date">Jan 2022 – Dec 2022</span>
+                </span>
+            </button>
+        </div>
+
+        <div
+            class="editor-window"
+            id="code-editor"
+            aria-live="polite"
+            aria-atomic="true"
+        >
+            <div class="editor-titlebar">
+                <div class="window-controls" aria-hidden="true">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                </div>
+
+                <span class="editor-window-title">
+                    ExperiencePortfolio - Visual Studio Code
+                </span>
+
+                <span class="editor-actions" aria-hidden="true">
+                    — □ ×
+                </span>
+            </div>
+
+            <div class="editor-layout">
+                <div class="activity-bar" aria-hidden="true">
+                    <span class="activity-icon active">{ }</span>
+                    <span class="activity-icon">⌕</span>
+                    <span class="activity-icon">⑂</span>
+                    <span class="activity-icon">▷</span>
+                </div>
+
+                <nav
+                    class="explorer"
+                    aria-label="Experience files"
+                >
+                    <p class="explorer-title">Explorer</p>
+                    <p class="project-name">EXPERIENCEPORTFOLIO</p>
+
+                    <ul class="file-list">
+                        <li>
+                            <button
+                                class="file-item active"
+                                type="button"
+                                data-index="0"
+                            >
+                                SoftwareEngineer.cs
+                            </button>
+                        </li>
+
+                        <li>
+                            <button
+                                class="file-item"
+                                type="button"
+                                data-index="1"
+                            >
+                                SystemDeveloper.cs
+                            </button>
+                        </li>
+
+                        <li>
+                            <button
+                                class="file-item"
+                                type="button"
+                                data-index="2"
+                            >
+                                ResearchAssistant.cs
+                            </button>
+                        </li>
+
+                        <li>
+                            <button
+                                class="file-item"
+                                type="button"
+                                data-index="3"
+                            >
+                                AssistantProfessor.cs
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="editor-main">
+                    <div class="tab-bar">
+                        <div class="editor-tab">
+                            <span class="csharp-icon">C#</span>
+                            <span id="tab-name">SoftwareEngineer.cs</span>
+                        </div>
+                    </div>
+
+                    <div class="code-pane">
+                        <div
+                            class="line-numbers"
+                            id="line-numbers"
+                            aria-hidden="true"
+                        ></div>
+
+                        <div
+                            class="code-lines"
+                            id="code-lines"
+                            aria-label="C sharp code describing the selected position"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-bar">
+                <div class="status-group">
+                    <span>main*</span>
+                    <span>0 errors</span>
+                    <span>0 warnings</span>
+                </div>
+
+                <div class="status-group">
+                    <span>Ln 1, Col 1</span>
+                    <span>Spaces: 4</span>
+                    <span>UTF-8</span>
+                    <span>C#</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="portfolio-footer">
+            Designed &amp; Developed ©
+            <span>Shomoita Jahid Mitin</span>
+        </footer>
+    </section>
+
+    <script>
+        "use strict";
+
+        const positions = [
+            {
+                fileName: "SoftwareEngineer.cs",
+                namespace: "USD.InformationTechnology",
+                className: "SoftwareEngineer",
+                organization: "University of South Dakota",
+                date: "May 2026 - Present",
+                summary:
+                    "Develops accessible, maintainable, and data-driven digital solutions for university partners.",
+                skills: [
+                    "Accessible Web Development",
+                    "Web Content Management",
+                    "JavaScript",
+                    "HTML and CSS",
+                    "Wix Studio",
+                    "Sitecore",
+                    "Software Documentation",
+                    "Knowledge-Based Articles",
+                    "Quality Assurance",
+                    "Responsive Design"
+                ],
+                responsibilities: [
+                    "Develop accessible websites and interactive web experiences",
+                    "Maintain university web content and content-management systems",
+                    "Create technical documentation and knowledge articles",
+                    "Test accessibility, responsiveness, and usability",
+                    "Support integrations, reporting, and automated workflows"
+                ]
+            },
+            {
+                fileName: "SystemDeveloper.cs",
+                namespace: "USD.InformationTechnology",
+                className: "SystemDeveloper",
+                organization: "University of South Dakota",
+                date: "December 2024 - May 2026",
+                summary:
+                    "Built enterprise applications, reports, integrations, and workflows that supported university operations.",
+                skills: [
+                    "IBM Cognos",
+                    "SQL",
+                    "PL/SQL",
+                    "Banner Communication",
+                    "iPaaS Pipeline Design",
+                    "API Integration",
+                    "Data Validation",
+                    "Database Management",
+                    "Automation",
+                    "Technical Support"
+                ],
+                responsibilities: [
+                    "Develop and maintain institutional Cognos reports",
+                    "Write SQL and PL/SQL queries for enterprise data",
+                    "Create iPaaS integrations and automated pipelines",
+                    "Support Banner-connected communication and data processes",
+                    "Troubleshoot application, reporting, and workflow issues"
+                ]
+            },
+            {
+                fileName: "ResearchAssistant.cs",
+                namespace: "USD.Research",
+                className: "ResearchAssistant",
+                organization: "University of South Dakota",
+                date: "May 2023 - December 2024",
+                summary:
+                    "Prepared research datasets and trained machine-learning agents to detect freezing of gait.",
+                skills: [
+                    "Python",
+                    "Machine Learning",
+                    "Reinforcement Learning",
+                    "Data Collection",
+                    "Data Cleaning",
+                    "Data Transformation",
+                    "Model Training",
+                    "Experimentation",
+                    "Technical Research",
+                    "Research Documentation"
+                ],
+                responsibilities: [
+                    "Collect research data from project sources",
+                    "Clean, modify, and transform datasets for analysis",
+                    "Prepare training and testing datasets",
+                    "Train machine-learning agents to detect freezing of gait",
+                    "Evaluate results and document research findings"
+                ]
+            },
+            {
+                fileName: "AssistantProfessor.cs",
+                namespace: "AUB.ComputerScience",
+                className: "AssistantProfessor",
+                organization: "Asian University of Bangladesh",
+                date: "January 2022 - December 2022",
+                summary:
+                    "Taught computing courses and guided students through programming, systems, and technical problem-solving.",
+                skills: [
+                    "Computer Science Education",
+                    "Programming Instruction",
+                    "Course Planning",
+                    "Curriculum Development",
+                    "Student Mentorship",
+                    "Technical Communication",
+                    "Assessment Design",
+                    "Classroom Presentation",
+                    "Academic Documentation",
+                    "Research Guidance"
+                ],
+                responsibilities: [
+                    "Teach undergraduate computing and programming courses",
+                    "Prepare lectures, assignments, and technical materials",
+                    "Guide students through software and systems concepts",
+                    "Evaluate student work and provide constructive feedback",
+                    "Contribute to curriculum and academic development"
+                ]
+            }
+        ];
+
+        const roleButtons = Array.from(
+            document.querySelectorAll(".role-button")
+        );
+
+        const fileButtons = Array.from(
+            document.querySelectorAll(".file-item")
+        );
+
+        const tabName =
+            document.getElementById("tab-name");
+
+        const lineNumbers =
+            document.getElementById("line-numbers");
+
+        const codeLines =
+            document.getElementById("code-lines");
+
+        let activeIndex = 0;
+
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function propertyLine(name, value) {
+            return (
+                '    <span class="syntax-keyword">public</span> ' +
+                '<span class="syntax-keyword">string</span> ' +
+                `<span class="syntax-property">${escapeHtml(name)}</span> ` +
+                '{ <span class="syntax-keyword">get</span>; } = ' +
+                `<span class="syntax-string">"${escapeHtml(value)}"</span>;`
+            );
+        }
+
+        function arrayStart(name) {
+            return (
+                '    <span class="syntax-keyword">public</span> ' +
+                '<span class="syntax-keyword">string</span>[] ' +
+                `<span class="syntax-property">${escapeHtml(name)}</span> ` +
+                '{ <span class="syntax-keyword">get</span>; } ='
+            );
+        }
+
+        function renderPosition(index) {
+            activeIndex =
+                (index + positions.length) % positions.length;
+
+            const position = positions[activeIndex];
+
+            roleButtons.forEach((button, buttonIndex) => {
+                const selected = buttonIndex === activeIndex;
+
+                button.classList.toggle("active", selected);
+                button.setAttribute(
+                    "aria-pressed",
+                    String(selected)
+                );
+            });
+
+            fileButtons.forEach((button, buttonIndex) => {
+                button.classList.toggle(
+                    "active",
+                    buttonIndex === activeIndex
+                );
+            });
+
+            tabName.textContent = position.fileName;
+
+            const lines = [
+                '<span class="syntax-keyword">using</span> System;',
+                '<span class="syntax-keyword">using</span> System.Collections.Generic;',
+                '',
+                `<span class="syntax-keyword">namespace</span> <span class="syntax-class">${escapeHtml(position.namespace)}</span>;`,
+                '',
+                `<span class="syntax-comment">/// &lt;summary&gt;</span>`,
+                `<span class="syntax-comment">/// ${escapeHtml(position.summary)}</span>`,
+                `<span class="syntax-comment">/// &lt;/summary&gt;</span>`,
+                `<span class="syntax-keyword">public</span> <span class="syntax-keyword">class</span> <span class="syntax-class">${escapeHtml(position.className)}</span>`,
+                '{',
+                propertyLine("Organization", position.organization),
+                propertyLine("EmploymentPeriod", position.date),
+                '',
+                arrayStart("Skills"),
+                '    [',
+                ...position.skills.map(
+                    (skill, skillIndex) =>
+                        `        <span class="syntax-string">"${escapeHtml(skill)}"</span>${skillIndex < position.skills.length - 1 ? "," : ""}`
+                ),
+                '    ];',
+                '',
+                arrayStart("Responsibilities"),
+                '    [',
+                ...position.responsibilities.map(
+                    (responsibility, responsibilityIndex) =>
+                        `        <span class="syntax-string">"${escapeHtml(responsibility)}"</span>${responsibilityIndex < position.responsibilities.length - 1 ? "," : ""}`
+                ),
+                '    ];',
+                '',
+                '    <span class="syntax-keyword">public</span> <span class="syntax-keyword">void</span> <span class="syntax-method">BuildImpact</span>()',
+                '    {',
+                `        Console.<span class="syntax-method">WriteLine</span>(<span class="syntax-string">"${escapeHtml(position.className)}: learning, building, and improving."</span>);`,
+                '    }',
+                '}'
+            ];
+
+            lineNumbers.innerHTML = lines
+                .map(
+                    (_, lineIndex) =>
+                        `<span>${lineIndex + 1}</span>`
+                )
+                .join("");
+
+            codeLines.innerHTML = lines
+                .map(
+                    (line, lineIndex) =>
+                        `<span class="code-line${lineIndex === 8 ? " highlight" : ""}">${line || " "}</span>`
+                )
+                .join("");
+        }
+
+        roleButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                renderPosition(Number(button.dataset.index));
+            });
+        });
+
+        fileButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                renderPosition(Number(button.dataset.index));
+            });
+        });
+
+        renderPosition(0);
+    </script>
+</body>
+</html>
