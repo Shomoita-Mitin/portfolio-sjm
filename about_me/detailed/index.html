@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Story | Shomoita Jahid Mitin</title>
+
+    <style>
+        :root {
+            --red: #DF1111;
+            --red-dark: #a40d0d;
+            --red-soft: #fff1f1;
+            --red-faint: rgba(223, 17, 17, 0.08);
+            --ink: #171717;
+            --text: #3f3f46;
+            --muted: #71717a;
+            --white: #ffffff;
+            --surface: #fafafa;
+            --border: #e7e7e7;
+            --line: #d4d4d8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 10% 8%, var(--red-faint), transparent 22rem),
+                linear-gradient(180deg, #ffffff, #fafafa);
+            color: var(--text);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            line-height: 1.7;
+        }
+
+        .story-page {
+            width: min(1180px, calc(100% - 30px));
+            margin: 0 auto;
+            padding: 38px 0 24px;
+        }
+
+        .story-hero {
+            position: relative;
+            min-height: 620px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+            align-items: center;
+            gap: 40px;
+            overflow: hidden;
+            padding: clamp(38px, 7vw, 84px);
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+        }
+
+        .story-hero::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            right: -180px;
+            top: -180px;
+            border: 1px solid rgba(223, 17, 17, 0.22);
+            border-radius: 50%;
+        }
+
+        .story-hero::after {
+            content: "";
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            left: -70px;
+            bottom: -70px;
+            background: var(--red-soft);
+            border-radius: 50%;
+        }
+
+        .hero-copy,
+        .hero-figure {
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            margin: 0 0 18px;
+            color: var(--red);
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            margin: 0;
+            color: var(--ink);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(48px, 7vw, 92px);
+            font-weight: 400;
+            line-height: 1.02;
+            letter-spacing: -0.045em;
+        }
+
+        .hero-title span {
+            display: block;
+            color: var(--red);
+            font-style: italic;
+        }
+
+        .hero-text {
+            max-width: 690px;
+            margin: 28px 0 0;
+            color: var(--muted);
+            font-size: clamp(17px, 2vw, 21px);
+        }
+
+        .scroll-note {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 34px;
+            color: var(--ink);
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .scroll-dot {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            color: var(--white);
+            background: var(--red);
+            border-radius: 50%;
+            animation: bounce 1.8s ease-in-out infinite;
+        }
+
+        .hero-figure {
+            display: grid;
+            place-items: center;
+            min-height: 400px;
+        }
+
+        .hero-orbit {
+            position: relative;
+            width: min(390px, 100%);
+            aspect-ratio: 1;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(223, 17, 17, 0.2);
+            border-radius: 50%;
+        }
+
+        .hero-orbit::before,
+        .hero-orbit::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .hero-orbit::before {
+            inset: 12%;
+            border: 1px dashed rgba(223, 17, 17, 0.3);
+            animation: rotate 18s linear infinite;
+        }
+
+        .hero-orbit::after {
+            width: 18px;
+            height: 18px;
+            top: 13%;
+            right: 19%;
+            background: var(--red);
+            box-shadow:
+                -235px 92px 0 -4px rgba(223, 17, 17, 0.45),
+                -82px 245px 0 -6px rgba(223, 17, 17, 0.25);
+        }
+
+        .hero-svg {
+            width: 64%;
+            max-width: 250px;
+            overflow: visible;
+        }
+
+        .journey {
+            position: relative;
+            margin-top: 90px;
+        }
+
+        .journey-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            background: var(--line);
+            transform: translateX(-50%);
+        }
+
+        .journey-progress {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 3px;
+            height: 0;
+            background: var(--red);
+            transform: translateX(-50%);
+            transition: height 0.16s linear;
+        }
+
+        .chapter {
+            position: relative;
+            min-height: 540px;
+            display: grid;
+            grid-template-columns: 1fr 120px 1fr;
+            align-items: center;
+            gap: 26px;
+            padding: 54px 0;
+        }
+
+        .chapter:nth-child(even) .chapter-copy {
+            grid-column: 3;
+        }
+
+        .chapter:nth-child(even) .chapter-scene {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .chapter-copy {
+            grid-column: 1;
+            max-width: 480px;
+            opacity: 0;
+            transform: translateY(34px);
+            transition: opacity 0.75s ease, transform 0.75s ease;
+        }
+
+        .chapter-scene {
+            grid-column: 3;
+            min-height: 360px;
+            display: grid;
+            place-items: center;
+            opacity: 0;
+            transform: translateY(34px) scale(0.96);
+            transition: opacity 0.75s ease 0.12s, transform 0.75s ease 0.12s;
+        }
+
+        .chapter.is-visible .chapter-copy,
+        .chapter.is-visible .chapter-scene {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .chapter-marker {
+            position: relative;
+            z-index: 3;
+            grid-column: 2;
+            display: grid;
+            place-items: center;
+        }
+
+        .marker-circle {
+            width: 64px;
+            height: 64px;
+            display: grid;
+            place-items: center;
+            color: var(--red);
+            background: var(--white);
+            border: 3px solid var(--red);
+            border-radius: 50%;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 21px;
+            font-weight: 700;
+            box-shadow: 0 0 0 10px var(--surface);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .chapter.is-visible .marker-circle {
+            color: var(--white);
+            background: var(--red);
+        }
+
+        .chapter-kicker {
+            margin: 0 0 10px;
+            color: var(--red);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .chapter-title {
+            margin: 0 0 18px;
+            color: var(--ink);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(34px, 4vw, 54px);
+            font-weight: 400;
+            line-height: 1.12;
+        }
+
+        .chapter-text {
+            margin: 0;
+            color: var(--muted);
+            font-size: 17px;
+        }
+
+        .chapter-text strong {
+            color: var(--ink);
+        }
+
+        .memory-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .memory-tag {
+            padding: 8px 14px;
+            color: var(--red-dark);
+            background: var(--red-soft);
+            border: 1px solid rgba(223, 17, 17, 0.16);
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .scene-stage {
+            position: relative;
+            width: min(380px, 100%);
+            min-height: 330px;
+            display: grid;
+            place-items: center;
+        }
+
+        .scene-stage::before {
+            content: "";
+            position: absolute;
+            inset: 14% 8%;
+            background:
+                radial-gradient(circle, rgba(223, 17, 17, 0.11), transparent 62%);
+            border-radius: 50%;
+        }
+
+        .scene-stage::after {
+            content: "";
+            position: absolute;
+            left: 8%;
+            right: 8%;
+            bottom: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--line), transparent);
+        }
+
+        .scene-svg {
+            position: relative;
+            z-index: 1;
+            width: min(270px, 80%);
+            overflow: visible;
+        }
+
+        .stick {
+            fill: none;
+            stroke: var(--ink);
+            stroke-width: 7;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .stick-red {
+            fill: none;
+            stroke: var(--red);
+            stroke-width: 7;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .fill-red {
+            fill: var(--red);
+        }
+
+        .fill-soft {
+            fill: var(--red-soft);
+        }
+
+        .fill-white {
+            fill: var(--white);
+        }
+
+        .baby-wrap {
+            transform-origin: center bottom;
+            animation: baby-rock 2.2s ease-in-out infinite;
+        }
+
+        .badminton-arm {
+            transform-origin: 120px 120px;
+            animation: swing 1.15s ease-in-out infinite alternate;
+        }
+
+        .shuttle {
+            animation: shuttle 1.15s ease-in-out infinite alternate;
+        }
+
+        .dance-body {
+            transform-origin: center bottom;
+            animation: dance 1.05s ease-in-out infinite alternate;
+        }
+
+        .music-note {
+            animation: float-note 1.8s ease-in-out infinite;
+        }
+
+        .book {
+            transform-origin: center bottom;
+            animation: book-breathe 2s ease-in-out infinite;
+        }
+
+        .code-line {
+            animation: code-blink 1.8s ease-in-out infinite;
+        }
+
+        .teacher-hand {
+            transform-origin: 120px 120px;
+            animation: teach-wave 1.5s ease-in-out infinite alternate;
+        }
+
+        .graduate-cap {
+            transform-origin: center;
+            animation: cap-float 2.2s ease-in-out infinite;
+        }
+
+        .working-hand {
+            transform-origin: 140px 135px;
+            animation: typing 0.55s ease-in-out infinite alternate;
+        }
+
+        .closing {
+            position: relative;
+            margin-top: 80px;
+            padding: clamp(54px, 8vw, 96px) 24px;
+            overflow: hidden;
+            text-align: center;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+        }
+
+        .closing::before {
+            content: "";
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            top: -130px;
+            left: 50%;
+            border: 1px solid rgba(223, 17, 17, 0.2);
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+
+        .closing-text {
+            position: relative;
+            max-width: 880px;
+            margin: 0 auto;
+            color: var(--ink);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(32px, 5vw, 64px);
+            line-height: 1.2;
+        }
+
+        .closing-text span {
+            color: var(--red);
+            font-style: italic;
+        }
+
+        .closing-subtext {
+            max-width: 670px;
+            margin: 24px auto 0;
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        .portfolio-footer {
+            margin-top: 34px;
+            padding: 24px 12px 10px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .portfolio-footer span {
+            color: var(--red);
+            font-weight: 900;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(7px); }
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes baby-rock {
+            0%, 100% { transform: rotate(-2deg) translateY(0); }
+            50% { transform: rotate(2deg) translateY(-5px); }
+        }
+
+        @keyframes swing {
+            from { transform: rotate(-18deg); }
+            to { transform: rotate(22deg); }
+        }
+
+        @keyframes shuttle {
+            from { transform: translate(-12px, 18px) rotate(-8deg); }
+            to { transform: translate(34px, -34px) rotate(18deg); }
+        }
+
+        @keyframes dance {
+            from { transform: rotate(-4deg) translateX(-4px); }
+            to { transform: rotate(4deg) translateX(4px); }
+        }
+
+        @keyframes float-note {
+            0%, 100% { transform: translateY(0); opacity: 0.55; }
+            50% { transform: translateY(-18px); opacity: 1; }
+        }
+
+        @keyframes book-breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.035); }
+        }
+
+        @keyframes code-blink {
+            0%, 100% { opacity: 0.35; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes teach-wave {
+            from { transform: rotate(-10deg); }
+            to { transform: rotate(10deg); }
+        }
+
+        @keyframes cap-float {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        @keyframes typing {
+            from { transform: rotate(-4deg) translateY(0); }
+            to { transform: rotate(4deg) translateY(3px); }
+        }
+
+        @media (max-width: 880px) {
+            .story-page {
+                width: min(100% - 20px, 1180px);
+                padding-top: 18px;
+            }
+
+            .story-hero {
+                min-height: auto;
+                grid-template-columns: 1fr;
+                padding: 42px 26px;
+                border-radius: 22px;
+            }
+
+            .hero-figure {
+                min-height: 310px;
+            }
+
+            .hero-orbit {
+                width: min(310px, 90%);
+            }
+
+            .journey {
+                margin-top: 60px;
+                padding-left: 34px;
+            }
+
+            .journey-line,
+            .journey-progress {
+                left: 17px;
+                transform: none;
+            }
+
+            .chapter {
+                min-height: auto;
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 54px 0;
+            }
+
+            .chapter-copy,
+            .chapter-scene,
+            .chapter:nth-child(even) .chapter-copy,
+            .chapter:nth-child(even) .chapter-scene {
+                grid-column: 1;
+                grid-row: auto;
+                max-width: none;
+            }
+
+            .chapter-marker {
+                position: absolute;
+                top: 58px;
+                left: -49px;
+                grid-column: auto;
+            }
+
+            .marker-circle {
+                width: 42px;
+                height: 42px;
+                font-size: 15px;
+                box-shadow: 0 0 0 7px var(--surface);
+            }
+
+            .chapter-scene {
+                min-height: 300px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation: none !important;
+                transition: none !important;
+            }
+
+            .chapter-copy,
+            .chapter-scene {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="story-page">
+        <section class="story-hero" aria-labelledby="story-title">
+            <div class="hero-copy">
+                <p class="eyebrow">A journey of becoming</p>
+
+                <p
+                    class="hero-title"
+                    id="story-title"
+                    role="heading"
+                    aria-level="1"
+                >
+                    My story began
+                    <span>before the code.</span>
+                </p>
+
+                <p class="hero-text">
+                    It began with a little girl surrounded by love, curiosity,
+                    music, books, and dreams. Scroll through the moments that
+                    shaped her into a software engineer, educator, researcher,
+                    and lifelong learner.
+                </p>
+
+                <div class="scroll-note">
+                    <span class="scroll-dot" aria-hidden="true">↓</span>
+                    Follow the journey
+                </div>
+            </div>
+
+            <div class="hero-figure" aria-hidden="true">
+                <div class="hero-orbit">
+                    <svg class="hero-svg" viewBox="0 0 260 320">
+                        <circle class="fill-soft" cx="130" cy="174" r="88"></circle>
+                        <circle class="stick" cx="130" cy="70" r="34"></circle>
+                        <path class="stick" d="M130 104 L130 206"></path>
+                        <path class="stick" d="M130 130 L82 168"></path>
+                        <path class="stick" d="M130 130 L184 158"></path>
+                        <path class="stick" d="M130 206 L92 278"></path>
+                        <path class="stick" d="M130 206 L176 278"></path>
+                        <path class="stick-red" d="M105 80 Q130 106 155 80"></path>
+                        <circle class="fill-red" cx="119" cy="64" r="4"></circle>
+                        <circle class="fill-red" cx="141" cy="64" r="4"></circle>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <section class="journey" aria-label="Animated life journey">
+            <div class="journey-line" aria-hidden="true"></div>
+            <div class="journey-progress" id="journey-progress" aria-hidden="true"></div>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">The beginning</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        A little girl arrived, already deeply loved.
+                    </p>
+                    <p class="chapter-text">
+                        I was born as the <strong>eldest and only daughter</strong>
+                        in a family of two siblings. With my younger brother beside
+                        me and parents who loved and encouraged me endlessly, my
+                        earliest world was filled with warmth, safety, and the
+                        freedom to dream.
+                    </p>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">01</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 280 320">
+                            <g class="baby-wrap">
+                                <ellipse class="fill-soft" cx="140" cy="246" rx="88" ry="34"></ellipse>
+                                <circle class="stick" cx="140" cy="104" r="42"></circle>
+                                <path class="stick" d="M112 86 Q140 56 168 86"></path>
+                                <circle class="fill-red" cx="126" cy="100" r="4"></circle>
+                                <circle class="fill-red" cx="154" cy="100" r="4"></circle>
+                                <path class="stick-red" d="M128 120 Q140 132 152 120"></path>
+                                <path class="stick" d="M110 160 Q140 136 170 160 L180 230 Q140 254 100 230 Z"></path>
+                                <path class="stick" d="M108 174 L78 202"></path>
+                                <path class="stick" d="M172 174 L202 202"></path>
+                                <path class="stick" d="M120 236 L108 266"></path>
+                                <path class="stick" d="M160 236 L172 266"></path>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">School years</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        Learning became her first superpower.
+                    </p>
+                    <p class="chapter-text">
+                        I was a dedicated student who genuinely enjoyed learning.
+                        Scholarships throughout my school years became more than
+                        awards—they became reminders that consistency, discipline,
+                        and curiosity could carry me toward bigger possibilities.
+                    </p>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">02</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 280 320">
+                            <circle class="stick" cx="140" cy="70" r="32"></circle>
+                            <path class="stick" d="M140 102 L140 202"></path>
+                            <path class="stick" d="M140 130 L94 160"></path>
+                            <path class="stick" d="M140 130 L188 158"></path>
+                            <path class="stick" d="M140 202 L102 274"></path>
+                            <path class="stick" d="M140 202 L180 274"></path>
+                            <path class="fill-soft" d="M76 142 L126 132 L132 210 L82 220 Z"></path>
+                            <path class="stick-red book" d="M76 142 L126 132 L132 210 L82 220 Z"></path>
+                            <path class="stick-red" d="M86 158 L116 152 M88 174 L118 168 M90 190 L120 184"></path>
+                            <path class="stick-red" d="M170 84 L224 84"></path>
+                            <path class="stick-red" d="M170 104 L212 104"></path>
+                            <path class="stick-red" d="M170 124 L230 124"></path>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">Childhood energy</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        She ran, played, and learned to compete.
+                    </p>
+                    <p class="chapter-text">
+                        Badminton gave me movement, focus, and joy. It was one of
+                        the places where childhood energy turned into confidence,
+                        coordination, and the determination to keep trying.
+                    </p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">Badminton</span>
+                        <span class="memory-tag">Energy</span>
+                        <span class="memory-tag">Focus</span>
+                    </div>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">03</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 300 320">
+                            <circle class="stick" cx="130" cy="68" r="30"></circle>
+                            <path class="stick" d="M130 98 L138 194"></path>
+                            <path class="stick" d="M136 128 L92 164"></path>
+                            <g class="badminton-arm">
+                                <path class="stick" d="M136 128 L190 114"></path>
+                                <path class="stick-red" d="M190 114 L234 70"></path>
+                                <ellipse class="stick-red" cx="246" cy="58" rx="20" ry="30" transform="rotate(42 246 58)"></ellipse>
+                            </g>
+                            <path class="stick" d="M138 194 L94 270"></path>
+                            <path class="stick" d="M138 194 L198 258"></path>
+                            <g class="shuttle">
+                                <circle class="fill-red" cx="246" cy="142" r="6"></circle>
+                                <path class="stick-red" d="M246 148 L236 166 M246 148 L256 166 M246 148 L246 170"></path>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">Creative childhood</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        She danced, sang, and discovered expression.
+                    </p>
+                    <p class="chapter-text">
+                        Before technology became my language, creativity was.
+                        I danced and sang as a child, learning how confidence,
+                        rhythm, imagination, and emotion could be expressed
+                        without needing to explain everything in words.
+                    </p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">Dancing</span>
+                        <span class="memory-tag">Singing</span>
+                        <span class="memory-tag">Creativity</span>
+                    </div>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">04</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 300 320">
+                            <g class="dance-body">
+                                <circle class="stick" cx="146" cy="68" r="30"></circle>
+                                <path class="stick" d="M146 98 Q132 150 146 202"></path>
+                                <path class="stick" d="M140 126 L88 94"></path>
+                                <path class="stick" d="M140 126 L204 86"></path>
+                                <path class="stick" d="M146 202 L98 272"></path>
+                                <path class="stick" d="M146 202 L208 250"></path>
+                                <path class="stick-red" d="M122 108 Q146 134 170 108"></path>
+                            </g>
+                            <text class="fill-red music-note" x="60" y="82" font-size="36">♪</text>
+                            <text class="fill-red music-note" x="224" y="130" font-size="30" style="animation-delay:.4s">♫</text>
+                            <text class="fill-red music-note" x="70" y="190" font-size="26" style="animation-delay:.8s">♪</text>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">Stories and imagination</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        Books and stories made her world larger.
+                    </p>
+                    <p class="chapter-text">
+                        The works of <strong>Rabindranath Tagore</strong> and
+                        <strong>Humayun Ahmed</strong> shaped my imagination.
+                        Later, stories such as Harry Potter, Game of Thrones,
+                        and Friends became familiar worlds I loved returning to.
+                    </p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">Tagore</span>
+                        <span class="memory-tag">Humayun Ahmed</span>
+                        <span class="memory-tag">Harry Potter</span>
+                        <span class="memory-tag">Game of Thrones</span>
+                        <span class="memory-tag">Friends</span>
+                    </div>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">05</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 300 320">
+                            <circle class="stick" cx="150" cy="66" r="30"></circle>
+                            <path class="stick" d="M150 96 L150 200"></path>
+                            <path class="stick" d="M150 128 L102 164"></path>
+                            <path class="stick" d="M150 128 L198 164"></path>
+                            <path class="stick" d="M150 200 L112 270"></path>
+                            <path class="stick" d="M150 200 L188 270"></path>
+                            <path class="fill-soft" d="M82 148 Q118 132 150 156 Q182 132 218 148 L208 224 Q178 210 150 232 Q122 210 92 224 Z"></path>
+                            <path class="stick-red book" d="M82 148 Q118 132 150 156 Q182 132 218 148 L208 224 Q178 210 150 232 Q122 210 92 224 Z"></path>
+                            <path class="stick-red" d="M150 156 L150 230"></path>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">The turning point</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        Then she chose Computer Science and Engineering.
+                    </p>
+                    <p class="chapter-text">
+                        That decision changed the direction of my life. I discovered
+                        that code was not merely syntax—it was a way to build,
+                        solve, improve, and turn ideas into systems people could use.
+                    </p>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">06</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 320 320">
+                            <circle class="stick" cx="118" cy="74" r="30"></circle>
+                            <path class="stick" d="M118 104 L118 204"></path>
+                            <path class="stick" d="M118 132 L82 170"></path>
+                            <path class="stick" d="M118 132 L162 168"></path>
+                            <path class="stick" d="M118 204 L88 274"></path>
+                            <path class="stick" d="M118 204 L154 274"></path>
+                            <rect class="fill-soft" x="160" y="94" width="128" height="102" rx="10"></rect>
+                            <rect class="stick-red" x="160" y="94" width="128" height="102" rx="10"></rect>
+                            <path class="stick-red" d="M178 122 L198 142 L178 162"></path>
+                            <path class="stick-red" d="M236 122 L216 162"></path>
+                            <path class="stick-red code-line" d="M248 122 L268 142 L248 162"></path>
+                            <path class="stick" d="M172 214 L276 214"></path>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">Professional beginning</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        The student became a Software Engineer.
+                    </p>
+                    <p class="chapter-text">
+                        I entered the professional world building software,
+                        strengthening my technical skills, and learning how
+                        thoughtful systems can solve practical problems and
+                        improve real experiences.
+                    </p>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">07</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 320 320">
+                            <circle class="stick" cx="110" cy="74" r="30"></circle>
+                            <path class="stick" d="M110 104 L110 200"></path>
+                            <path class="stick" d="M110 132 L76 170"></path>
+                            <g class="working-hand">
+                                <path class="stick" d="M110 132 L164 170"></path>
+                            </g>
+                            <path class="stick" d="M110 200 L82 272"></path>
+                            <path class="stick" d="M110 200 L146 272"></path>
+                            <rect class="fill-soft" x="154" y="100" width="132" height="90" rx="10"></rect>
+                            <rect class="stick-red" x="154" y="100" width="132" height="90" rx="10"></rect>
+                            <path class="stick-red" d="M176 126 H258 M176 148 H238 M176 170 H270"></path>
+                            <path class="stick" d="M144 216 H296"></path>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">Sharing knowledge</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        The engineer stepped into a classroom.
+                    </p>
+                    <p class="chapter-text">
+                        As a <strong>University Faculty Member</strong>, I taught,
+                        mentored students, developed learning experiences, and
+                        discovered how meaningful it could be to help someone
+                        else understand, grow, and believe in their own ability.
+                    </p>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">08</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 330 320">
+                            <rect class="fill-soft" x="150" y="54" width="150" height="116" rx="8"></rect>
+                            <rect class="stick-red" x="150" y="54" width="150" height="116" rx="8"></rect>
+                            <path class="stick-red" d="M174 84 H270 M174 110 H246 M174 136 H280"></path>
+                            <circle class="stick" cx="98" cy="86" r="29"></circle>
+                            <path class="stick" d="M98 115 L98 208"></path>
+                            <path class="stick" d="M98 140 L64 178"></path>
+                            <g class="teacher-hand">
+                                <path class="stick" d="M98 140 L150 104"></path>
+                            </g>
+                            <path class="stick" d="M98 208 L70 276"></path>
+                            <path class="stick" d="M98 208 L132 276"></path>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">A new country</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        She crossed an ocean to begin again.
+                    </p>
+                    <p class="chapter-text">
+                        I moved to the United States to pursue a
+                        <strong>Master of Science in Computer Science at the
+                        University of South Dakota</strong>. It was a chapter of
+                        courage, adaptation, advanced learning, research, and
+                        becoming more capable than I had previously imagined.
+                    </p>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">09</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 330 320">
+                            <g class="graduate-cap">
+                                <path class="fill-red" d="M92 78 L162 42 L232 78 L162 114 Z"></path>
+                                <path class="stick-red" d="M92 78 L162 42 L232 78 L162 114 Z"></path>
+                                <path class="stick-red" d="M222 82 L222 138"></path>
+                                <circle class="fill-red" cx="222" cy="144" r="8"></circle>
+                            </g>
+                            <circle class="stick" cx="162" cy="130" r="31"></circle>
+                            <path class="stick" d="M162 161 L162 236"></path>
+                            <path class="stick" d="M162 184 L118 212"></path>
+                            <path class="stick" d="M162 184 L206 212"></path>
+                            <path class="stick" d="M162 236 L132 292"></path>
+                            <path class="stick" d="M162 236 L192 292"></path>
+                            <path class="stick-red" d="M118 172 Q162 198 206 172"></path>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+
+            <article class="chapter">
+                <div class="chapter-copy">
+                    <p class="chapter-kicker">Today</p>
+                    <p class="chapter-title" role="heading" aria-level="2">
+                        Now she builds technology at ITS, USD.
+                    </p>
+                    <p class="chapter-text">
+                        Today, I work as a <strong>Software Engineer with
+                        Information Technology Services at the University of
+                        South Dakota</strong>. I build enterprise solutions,
+                        accessible web experiences, integrations, reporting
+                        systems, and user-focused applications while continuing
+                        to explore AI and machine learning through research.
+                    </p>
+                </div>
+
+                <div class="chapter-marker">
+                    <div class="marker-circle">10</div>
+                </div>
+
+                <div class="chapter-scene" aria-hidden="true">
+                    <div class="scene-stage">
+                        <svg class="scene-svg" viewBox="0 0 340 320">
+                            <circle class="stick" cx="100" cy="74" r="30"></circle>
+                            <path class="stick" d="M100 104 L100 204"></path>
+                            <path class="stick" d="M100 132 L62 172"></path>
+                            <g class="working-hand">
+                                <path class="stick" d="M100 132 L154 172"></path>
+                            </g>
+                            <path class="stick" d="M100 204 L70 278"></path>
+                            <path class="stick" d="M100 204 L136 278"></path>
+                            <rect class="fill-soft" x="148" y="82" width="154" height="112" rx="12"></rect>
+                            <rect class="stick-red" x="148" y="82" width="154" height="112" rx="12"></rect>
+                            <circle class="fill-red" cx="178" cy="116" r="7"></circle>
+                            <path class="stick-red" d="M198 116 H272 M174 144 H274 M174 168 H242"></path>
+                            <path class="stick" d="M138 220 H312"></path>
+                            <circle class="fill-red" cx="286" cy="238" r="8"></circle>
+                            <path class="stick-red" d="M286 246 V276 M270 260 H302"></path>
+                        </svg>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="closing" aria-label="Closing reflection">
+            <p class="closing-text">
+                Every line of code still carries a piece of the little girl
+                who simply <span>loved learning.</span>
+            </p>
+
+            <p class="closing-subtext">
+                She grew, traveled, taught, researched, and built—but the
+                curiosity that started the journey never left. This is not
+                the end of the story. It is another beginning.
+            </p>
+        </section>
+
+        <footer class="portfolio-footer">
+            Designed &amp; Developed ©
+            <span>Shomoita Jahid Mitin</span>
+        </footer>
+    </main>
+
+    <script>
+        "use strict";
+
+        const chapters = document.querySelectorAll(".chapter");
+        const journey = document.querySelector(".journey");
+        const progress = document.getElementById("journey-progress");
+        const reduceMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        if (!reduceMotion && "IntersectionObserver" in window) {
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("is-visible");
+                        }
+                    });
+                },
+                {
+                    threshold: 0.22
+                }
+            );
+
+            chapters.forEach((chapter) => observer.observe(chapter));
+        } else {
+            chapters.forEach((chapter) => {
+                chapter.classList.add("is-visible");
+            });
+        }
+
+        function updateJourneyProgress() {
+            const rect = journey.getBoundingClientRect();
+            const viewportMiddle = window.innerHeight * 0.52;
+            const traveled = viewportMiddle - rect.top;
+            const percentage = Math.max(
+                0,
+                Math.min(1, traveled / rect.height)
+            );
+
+            progress.style.height = `${percentage * 100}%`;
+        }
+
+        updateJourneyProgress();
+
+        window.addEventListener(
+            "scroll",
+            updateJourneyProgress,
+            { passive: true }
+        );
+
+        window.addEventListener(
+            "resize",
+            updateJourneyProgress
+        );
+    </script>
+</body>
+</html>
