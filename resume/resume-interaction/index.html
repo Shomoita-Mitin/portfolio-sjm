@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Explore the interactive resume of Shomoita Jahid Mitin, Software Engineer, AI Researcher, and Full-Stack Developer."
+    >
+
+    <title>Interactive Resume | Shomoita Jahid Mitin</title>
+
+    <style>
+        :root {
+            --primary-red: #DF1111;
+            --primary-red-dark: #B90E0E;
+            --black: #111111;
+            --dark-gray: #333333;
+            --medium-gray: #666666;
+            --light-gray: #F3F3F3;
+            --border-gray: #D8D8D8;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--white);
+            color: var(--black);
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+            line-height: 1.6;
+        }
+
+        button,
+        a {
+            font: inherit;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 4px solid var(--black);
+            outline-offset: 4px;
+        }
+
+        .resume-page {
+            width: min(1200px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 48px 0;
+        }
+
+        /* Intro */
+
+        .resume-intro {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+            gap: 40px;
+            align-items: center;
+            padding: 52px;
+            border: 2px solid var(--black);
+            background: var(--white);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 14px;
+            color: var(--primary-red);
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .resume-title {
+            margin: 0 0 18px;
+            max-width: 750px;
+            font-size: clamp(2.4rem, 6vw, 5.5rem);
+            line-height: 0.98;
+            letter-spacing: -0.05em;
+        }
+
+        .resume-title span {
+            color: var(--primary-red);
+        }
+
+        .resume-description {
+            max-width: 720px;
+            margin: 0;
+            color: var(--dark-gray);
+            font-size: 1.08rem;
+        }
+
+        .intro-status {
+            position: relative;
+            padding: 30px;
+            border: 2px solid var(--primary-red);
+        }
+
+        .intro-status::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--black);
+            z-index: -1;
+        }
+
+        .status-label {
+            margin: 0 0 8px;
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-value {
+            margin: 0 0 20px;
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .status-list {
+            display: grid;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .status-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .status-list li::before {
+            content: "■";
+            color: var(--primary-red);
+            font-size: 0.8rem;
+        }
+
+        /* Actions */
+
+        .resume-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 32px;
+        }
+
+        .resume-button {
+            display: inline-flex;
+            min-height: 50px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border: 2px solid var(--primary-red);
+            background: var(--primary-red);
+            color: var(--white);
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .resume-button:hover {
+            background: var(--primary-red-dark);
+            border-color: var(--primary-red-dark);
+            transform: translateY(-2px);
+        }
+
+        .resume-button.secondary {
+            background: var(--white);
+            color: var(--primary-red);
+        }
+
+        .resume-button.secondary:hover {
+            background: var(--primary-red);
+            color: var(--white);
+        }
+
+        .resume-button.dark {
+            border-color: var(--black);
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .resume-button.dark:hover {
+            border-color: var(--primary-red);
+            background: var(--primary-red);
+        }
+
+        /* Controls */
+
+        .resume-controls {
+            margin-top: 42px;
+            padding: 28px;
+            background: var(--light-gray);
+            border-left: 8px solid var(--primary-red);
+        }
+
+        .controls-heading {
+            margin: 0 0 18px;
+            font-size: 1.35rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-button {
+            min-height: 44px;
+            padding: 9px 16px;
+            border: 2px solid var(--black);
+            background: var(--white);
+            color: var(--black);
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .filter-button:hover,
+        .filter-button.active {
+            border-color: var(--primary-red);
+            background: var(--primary-red);
+            color: var(--white);
+        }
+
+        .view-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-gray);
+        }
+
+        .view-button {
+            min-height: 42px;
+            padding: 8px 14px;
+            border: 2px solid var(--black);
+            background: transparent;
+            color: var(--black);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .view-button:hover {
+            border-color: var(--primary-red);
+            color: var(--primary-red);
+        }
+
+        /* Resume layout */
+
+        .resume-layout {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+            gap: 30px;
+            margin-top: 42px;
+        }
+
+        .resume-sidebar {
+            align-self: start;
+            padding: 28px;
+            border: 2px solid var(--black);
+            position: sticky;
+            top: 20px;
+        }
+
+        .profile-initials {
+            display: grid;
+            width: 100px;
+            height: 100px;
+            place-items: center;
+            margin-bottom: 22px;
+            background: var(--primary-red);
+            color: var(--white);
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .sidebar-name {
+            margin: 0;
+            font-size: 1.65rem;
+            line-height: 1.15;
+        }
+
+        .sidebar-role {
+            margin: 10px 0 26px;
+            color: var(--primary-red);
+            font-weight: 800;
+        }
+
+        .sidebar-section {
+            padding: 20px 0;
+            border-top: 1px solid var(--border-gray);
+        }
+
+        .sidebar-section:last-child {
+            padding-bottom: 0;
+        }
+
+        .sidebar-heading {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .sidebar-list {
+            display: grid;
+            gap: 8px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            color: var(--dark-gray);
+        }
+
+        .sidebar-link {
+            color: var(--black);
+            font-weight: 700;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        .sidebar-link:hover {
+            color: var(--primary-red);
+        }
+
+        .resume-content {
+            min-width: 0;
+        }
+
+        /* Expandable resume sections */
+
+        .resume-section {
+            margin-bottom: 18px;
+            border: 2px solid var(--black);
+            background: var(--white);
+        }
+
+        .section-toggle {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 22px 24px;
+            border: 0;
+            background: var(--white);
+            color: var(--black);
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .section-toggle:hover {
+            background: var(--light-gray);
+        }
+
+        .section-heading {
+            margin: 0;
+            font-size: 1.35rem;
+        }
+
+        .toggle-icon {
+            display: grid;
+            flex: 0 0 34px;
+            width: 34px;
+            height: 34px;
+            place-items: center;
+            border: 2px solid var(--primary-red);
+            color: var(--primary-red);
+            font-size: 1.4rem;
+            font-weight: 900;
+        }
+
+        .section-content {
+            padding: 0 24px 26px;
+        }
+
+        .section-content[hidden] {
+            display: none;
+        }
+
+        .resume-item {
+            position: relative;
+            padding: 24px 0 24px 26px;
+            border-top: 1px solid var(--border-gray);
+        }
+
+        .resume-item:first-child {
+            border-top: 0;
+        }
+
+        .resume-item::before {
+            content: "";
+            position: absolute;
+            top: 31px;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-red);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .item-title {
+            margin: 0;
+            font-size: 1.15rem;
+        }
+
+        .item-organization {
+            margin: 5px 0 0;
+            color: var(--primary-red);
+            font-weight: 800;
+        }
+
+        .item-date {
+            flex: 0 0 auto;
+            padding: 5px 10px;
+            background: var(--light-gray);
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .item-description {
+            margin: 14px 0 0;
+            color: var(--dark-gray);
+        }
+
+        .item-details {
+            margin: 14px 0 0;
+            padding-left: 20px;
+            color: var(--dark-gray);
+        }
+
+        .item-details li + li {
+            margin-top: 8px;
+        }
+
+        .skill-groups {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .skill-group {
+            padding: 20px;
+            border: 1px solid var(--border-gray);
+        }
+
+        .skill-group-title {
+            margin: 0 0 14px;
+            font-size: 1rem;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .skill-list li {
+            padding: 6px 10px;
+            background: var(--light-gray);
+            color: var(--black);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: 14px;
+            color: var(--primary-red);
+            font-weight: 800;
+            text-underline-offset: 4px;
+        }
+
+        .project-link:hover {
+            color: var(--black);
+        }
+
+        .empty-message {
+            display: none;
+            padding: 38px;
+            border: 2px dashed var(--border-gray);
+            text-align: center;
+        }
+
+        .empty-message.visible {
+            display: block;
+        }
+
+        .resume-section.filtered-out {
+            display: none;
+        }
+
+        /* Compact view */
+
+        body.compact-view .item-description,
+        body.compact-view .item-details,
+        body.compact-view .project-link {
+            display: none;
+        }
+
+        body.compact-view .resume-item {
+            padding-top: 17px;
+            padding-bottom: 17px;
+        }
+
+        body.compact-view .resume-item::before {
+            top: 24px;
+        }
+
+        /* Download callout */
+
+        .template-callout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 30px;
+            align-items: center;
+            margin-top: 44px;
+            padding: 36px;
+            background: var(--primary-red);
+            color: var(--white);
+        }
+
+        .template-callout h2 {
+            margin: 0 0 8px;
+            font-size: clamp(1.7rem, 4vw, 2.6rem);
+        }
+
+        .template-callout p {
+            max-width: 680px;
+            margin: 0;
+        }
+
+        .template-callout .resume-button {
+            border-color: var(--white);
+            background: var(--white);
+            color: var(--primary-red);
+        }
+
+        .template-callout .resume-button:hover {
+            border-color: var(--black);
+            background: var(--black);
+            color: var(--white);
+        }
+
+        /* Footer */
+
+        .portfolio-footer {
+            margin-top: 50px;
+            padding: 28px 16px;
+            border-top: 2px solid var(--black);
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .portfolio-footer span {
+            color: var(--primary-red);
+        }
+
+        /* Responsive */
+
+        @media (max-width: 900px) {
+            .resume-intro,
+            .resume-layout,
+            .template-callout {
+                grid-template-columns: 1fr;
+            }
+
+            .resume-sidebar {
+                position: static;
+            }
+
+            .skill-groups {
+                grid-template-columns: 1fr;
+            }
+
+            .template-callout {
+                justify-items: start;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .resume-page {
+                width: min(100% - 20px, 1200px);
+                padding-top: 20px;
+            }
+
+            .resume-intro {
+                padding: 28px 22px;
+            }
+
+            .resume-controls,
+            .resume-sidebar,
+            .template-callout {
+                padding: 22px;
+            }
+
+            .resume-actions,
+            .filter-buttons,
+            .view-controls {
+                flex-direction: column;
+            }
+
+            .resume-button,
+            .filter-button,
+            .view-button {
+                width: 100%;
+            }
+
+            .item-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .item-date {
+                align-self: flex-start;
+            }
+        }
+
+        /* Print styles */
+
+        @media print {
+            .resume-intro,
+            .resume-controls,
+            .template-callout,
+            .portfolio-footer,
+            .toggle-icon {
+                display: none !important;
+            }
+
+            body {
+                background: var(--white);
+            }
+
+            .resume-page {
+                width: 100%;
+                padding: 0;
+            }
+
+            .resume-layout {
+                display: grid;
+                grid-template-columns: 220px 1fr;
+                gap: 20px;
+                margin: 0;
+            }
+
+            .resume-sidebar {
+                position: static;
+                border-width: 1px;
+            }
+
+            .resume-section {
+                break-inside: avoid;
+                border-width: 1px;
+            }
+
+            .section-content[hidden] {
+                display: block;
+            }
+
+            .section-toggle {
+                padding-bottom: 8px;
+            }
+
+            .section-content {
+                display: block !important;
+            }
+
+            .resume-item {
+                break-inside: avoid;
+            }
+
+            a {
+                color: var(--black);
+                text-decoration: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="resume-page">
+
+        <section class="resume-intro" aria-labelledby="resume-page-title">
+            <div>
+                <span class="eyebrow">Professional Journey</span>
+
+                <h1 class="resume-title" id="resume-page-title">
+                    My Interactive
+                    <span>Resume.</span>
+                </h1>
+
+                <p class="resume-description">
+                    Explore my experience in software engineering, artificial
+                    intelligence, full-stack development, accessibility,
+                    enterprise reporting, research, and system integrations.
+                </p>
+
+                <div class="resume-actions">
+                    <a
+                        class="resume-button"
+                        href="assets/documents/Shomoita-Jahid-Mitin-Resume.pdf"
+                        download
+                    >
+                        Download My Resume
+                    </a>
+
+                    <a
+                        class="resume-button secondary"
+                        href="assets/documents/Software-Engineer-Resume-Template.docx"
+                        download
+                    >
+                        Get Resume Template
+                    </a>
+
+                    <button
+                        class="resume-button dark"
+                        id="printResume"
+                        type="button"
+                    >
+                        Print or Save as PDF
+                    </button>
+                </div>
+            </div>
+
+            <aside class="intro-status" aria-label="Professional summary">
+                <p class="status-label">Current Focus</p>
+
+                <p class="status-value">
+                    Building accessible and intelligent digital solutions
+                </p>
+
+                <ul class="status-list">
+                    <li>Software engineering</li>
+                    <li>Artificial intelligence research</li>
+                    <li>Full-stack web development</li>
+                    <li>WCAG accessibility</li>
+                    <li>Enterprise systems and reporting</li>
+                </ul>
+            </aside>
+        </section>
+
+        <section class="resume-controls" aria-labelledby="filter-heading">
+            <h2 class="controls-heading" id="filter-heading">
+                Explore by category
+            </h2>
+
+            <div
+                class="filter-buttons"
+                role="group"
+                aria-label="Resume category filters"
+            >
+                <button
+                    class="filter-button active"
+                    type="button"
+                    data-filter="all"
+                    aria-pressed="true"
+                >
+                    All
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="engineering"
+                    aria-pressed="false"
+                >
+                    Software Engineering
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="research"
+                    aria-pressed="false"
+                >
+                    AI Research
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="development"
+                    aria-pressed="false"
+                >
+                    Web Development
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="accessibility"
+                    aria-pressed="false"
+                >
+                    Accessibility
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="reporting"
+                    aria-pressed="false"
+                >
+                    Reporting
+                </button>
+            </div>
+
+            <div class="view-controls">
+                <button
+                    class="view-button"
+                    id="expandAll"
+                    type="button"
+                >
+                    Expand All
+                </button>
+
+                <button
+                    class="view-button"
+                    id="collapseAll"
+                    type="button"
+                >
+                    Collapse All
+                </button>
+
+                <button
+                    class="view-button"
+                    id="toggleView"
+                    type="button"
+                    aria-pressed="false"
+                >
+                    Use Compact View
+                </button>
+            </div>
+        </section>
+
+        <div class="resume-layout">
+
+            <aside class="resume-sidebar" aria-label="Contact and profile details">
+                <div class="profile-initials" aria-hidden="true">
+                    SJM
+                </div>
+
+                <h2 class="sidebar-name">
+                    Shomoita Jahid Mitin
+                </h2>
+
+                <p class="sidebar-role">
+                    Software Engineer, AI Researcher and Full-Stack Developer
+                </p>
+
+                <section class="sidebar-section">
+                    <h3 class="sidebar-heading">Education</h3>
+
+                    <ul class="sidebar-list">
+                        <li>Master of Science in Computer Science</li>
+                        <li>University of South Dakota</li>
+                    </ul>
+                </section>
+
+                <section class="sidebar-section">
+                    <h3 class="sidebar-heading">Specializations</h3>
+
+                    <ul class="sidebar-list">
+                        <li>Software Engineering</li>
+                        <li>Artificial Intelligence</li>
+                        <li>Machine Learning</li>
+                        <li>Web Accessibility</li>
+                        <li>Enterprise Reporting</li>
+                    </ul>
+                </section>
+
+                <section class="sidebar-section">
+                    <h3 class="sidebar-heading">Profiles</h3>
+
+                    <ul class="sidebar-list">
+                        <li>
+                            <a
+                                class="sidebar-link"
+                                href="https://github.com/Shomoita-Mitin"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                GitHub
+                            </a>
+                        </li>
+
+                        <li>
+                            <a
+                                class="sidebar-link"
+                                href="#"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                LinkedIn
+                            </a>
+                        </li>
+
+                        <li>
+                            <a
+                                class="sidebar-link"
+                                href="#"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Google Scholar
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            </aside>
+
+            <div class="resume-content" id="resumeContent">
+
+                <!-- Professional Summary -->
+
+                <section
+                    class="resume-section"
+                    data-category="engineering research development accessibility reporting"
+                >
+                    <button
+                        class="section-toggle"
+                        type="button"
+                        aria-expanded="true"
+                        aria-controls="summary-content"
+                    >
+                        <span class="section-heading">
+                            Professional Summary
+                        </span>
+
+                        <span class="toggle-icon" aria-hidden="true">
+                            −
+                        </span>
+                    </button>
+
+                    <div class="section-content" id="summary-content">
+                        <div class="resume-item">
+                            <h3 class="item-title">
+                                Software Engineer, AI Researcher and
+                                Full-Stack Developer
+                            </h3>
+
+                            <p class="item-description">
+                                I design and develop modern, accessible and
+                                user-focused digital solutions. My experience
+                                includes software engineering, artificial
+                                intelligence, machine learning, enterprise
+                                reporting, responsive web development, data
+                                analytics, system integrations and WCAG
+                                accessibility.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Experience -->
+
+                <section
+                    class="resume-section"
+                    data-category="engineering development accessibility reporting"
+                >
+                    <button
+                        class="section-toggle"
+                        type="button"
+                        aria-expanded="true"
+                        aria-controls="experience-content"
+                    >
+                        <span class="section-heading">
+                            Professional Experience
+                        </span>
+
+                        <span class="toggle-icon" aria-hidden="true">
+                            −
+                        </span>
+                    </button>
+
+                    <div class="section-content" id="experience-content">
+                        <article class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <h3 class="item-title">
+                                        Software Engineering and Web Development
+                                    </h3>
+
+                                    <p class="item-organization">
+                                        University of South Dakota
+                                    </p>
+                                </div>
+
+                                <span class="item-date">
+                                    Current
+                                </span>
+                            </div>
+
+                            <p class="item-description">
+                                Develop and maintain accessible digital
+                                experiences, enterprise solutions, integrations,
+                                reports and production websites.
+                            </p>
+
+                            <ul class="item-details">
+                                <li>
+                                    Design and develop responsive websites and
+                                    enterprise web solutions.
+                                </li>
+
+                                <li>
+                                    Perform accessibility reviews based on WCAG
+                                    standards.
+                                </li>
+
+                                <li>
+                                    Develop IBM Cognos reports for university
+                                    departments.
+                                </li>
+
+                                <li>
+                                    Build and maintain system integrations and
+                                    automated workflows.
+                                </li>
+
+                                <li>
+                                    Create technical documentation, development
+                                    guides and knowledge-based articles.
+                                </li>
+                            </ul>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- Skills -->
+
+                <section
+                    class="resume-section"
+                    data-category="engineering research development accessibility reporting"
+                >
+                    <button
+                        class="section-toggle"
+                        type="button"
+                        aria-expanded="true"
+                        aria-controls="skills-content"
+                    >
+                        <span class="section-heading">
+                            Technical Skills
+                        </span>
+
+                        <span class="toggle-icon" aria-hidden="true">
+                            −
+                        </span>
+                    </button>
+
+                    <div class="section-content" id="skills-content">
+                        <div class="skill-groups">
+
+                            <section class="skill-group">
+                                <h3 class="skill-group-title">
+                                    Software Development
+                                </h3>
+
+                                <ul class="skill-list">
+                                    <li>Python</li>
+                                    <li>Java</li>
+                                    <li>JavaScript</li>
+                                    <li>HTML</li>
+                                    <li>CSS</li>
+                                    <li>Full-Stack Development</li>
+                                    <li>Clean Code</li>
+                                </ul>
+                            </section>
+
+                            <section class="skill-group">
+                                <h3 class="skill-group-title">
+                                    Artificial Intelligence
+                                </h3>
+
+                                <ul class="skill-list">
+                                    <li>Machine Learning</li>
+                                    <li>Deep Learning</li>
+                                    <li>NLP</li>
+                                    <li>Reinforcement Learning</li>
+                                    <li>TensorFlow</li>
+                                    <li>PyTorch</li>
+                                    <li>Data Analytics</li>
+                                </ul>
+                            </section>
+
+                            <section class="skill-group">
+                                <h3 class="skill-group-title">
+                                    Enterprise Technologies
+                                </h3>
+
+                                <ul class="skill-list">
+                                    <li>IBM Cognos</li>
+                                    <li>PL/SQL</li>
+                                    <li>Oracle</li>
+                                    <li>ERP</li>
+                                    <li>System Integrations</li>
+                                    <li>Pipeline Automation</li>
+                                </ul>
+                            </section>
+
+                            <section class="skill-group">
+                                <h3 class="skill-group-title">
+                                    Web and Accessibility
+                                </h3>
+
+                                <ul class="skill-list">
+                                    <li>WCAG</li>
+                                    <li>Accessibility Testing</li>
+                                    <li>Responsive Design</li>
+                                    <li>Sitecore</li>
+                                    <li>Wix Studio</li>
+                                    <li>SEO</li>
+                                    <li>Quality Assurance</li>
+                                </ul>
+                            </section>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Projects -->
+
+                <section
+                    class="resume-section"
+                    data-category="engineering development accessibility reporting"
+                >
+                    <button
+                        class="section-toggle"
+                        type="button"
+                        aria-expanded="true"
+                        aria-controls="projects-content"
+                    >
+                        <span class="section-heading">
+                            Selected Projects
+                        </span>
+
+                        <span class="toggle-icon" aria-hidden="true">
+                            −
+                        </span>
+                    </button>
+
+                    <div class="section-content" id="projects-content">
+
+                        <article class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <h3 class="item-title">
+                                        Reading Room @ USD
+                                    </h3>
+
+                                    <p class="item-organization">
+                                        Web Development and Accessibility
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="item-description">
+                                Designed and developed a responsive and
+                                accessible digital publication website for USD
+                                Libraries as the project's sole developer.
+                            </p>
+
+                            <ul class="item-details">
+                                <li>
+                                    Led the complete website design and
+                                    development process.
+                                </li>
+
+                                <li>
+                                    Migrated content from the previous WordPress
+                                    platform.
+                                </li>
+
+                                <li>
+                                    Conducted accessibility and responsive-design
+                                    reviews before launch.
+                                </li>
+                            </ul>
+
+                            <a
+                                class="project-link"
+                                href="https://readingroom.usd.edu"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                View live project
+                            </a>
+                        </article>
+
+                        <article class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <h3 class="item-title">
+                                        WCAG Interactive Trainer
+                                    </h3>
+
+                                    <p class="item-organization">
+                                        Accessibility Education
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="item-description">
+                                Developed an interactive learning experience
+                                that helps users identify common accessibility
+                                issues involving headings, links, images and
+                                page structure.
+                            </p>
+                        </article>
+
+                        <article class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <h3 class="item-title">
+                                        Enterprise Cognos Reporting
+                                    </h3>
+
+                                    <p class="item-organization">
+                                        Data Analytics and Reporting
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="item-description">
+                                Developed enterprise reports supporting the
+                                Registrar, Marketing, Graduate School, Human
+                                Resources, Grants and other university areas.
+                            </p>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- Research -->
+
+                <section
+                    class="resume-section"
+                    data-category="research"
+                >
+                    <button
+                        class="section-toggle"
+                        type="button"
+                        aria-expanded="true"
+                        aria-controls="research-content"
+                    >
+                        <span class="section-heading">
+                            Research
+                        </span>
+
+                        <span class="toggle-icon" aria-hidden="true">
+                            −
+                        </span>
+                    </button>
+
+                    <div class="section-content" id="research-content">
+
+                        <article class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <h3 class="item-title">
+                                        BiSAM for Parkinson's Disease Research
+                                    </h3>
+
+                                    <p class="item-organization">
+                                        Artificial Intelligence and EEG Analysis
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="item-description">
+                                Developed a Bi-cephalic Self-Attention Model
+                                using resting-state EEG and participant
+                                information to support Parkinson's Disease
+                                classification research.
+                            </p>
+                        </article>
+
+                        <article class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <h3 class="item-title">
+                                        Pandemic Stage Classification
+                                    </h3>
+
+                                    <p class="item-organization">
+                                        Machine Learning Research
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="item-description">
+                                Applied machine-learning methods to economic,
+                                educational, physical-health and mental-health
+                                data to classify COVID-19 pandemic stages in
+                                Bangladesh.
+                            </p>
+                        </article>
+
+                        <article class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <h3 class="item-title">
+                                        Information Retrieval for Parkinson's
+                                        Disease Research
+                                    </h3>
+
+                                    <p class="item-organization">
+                                        Natural Language Processing
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="item-description">
+                                Developed an ensemble-ranking model to improve
+                                information-retrieval and recommendation
+                                accuracy using NLP techniques.
+                            </p>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- Education -->
+
+                <section
+                    class="resume-section"
+                    data-category="engineering research development"
+                >
+                    <button
+                        class="section-toggle"
+                        type="button"
+                        aria-expanded="true"
+                        aria-controls="education-content"
+                    >
+                        <span class="section-heading">
+                            Education
+                        </span>
+
+                        <span class="toggle-icon" aria-hidden="true">
+                            −
+                        </span>
+                    </button>
+
+                    <div class="section-content" id="education-content">
+                        <article class="resume-item">
+                            <div class="item-header">
+                                <div>
+                                    <h3 class="item-title">
+                                        Master of Science in Computer Science
+                                    </h3>
+
+                                    <p class="item-organization">
+                                        University of South Dakota
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="item-description">
+                                Advanced study in software engineering,
+                                artificial intelligence, machine learning,
+                                algorithms, data systems and modern computing
+                                technologies.
+                            </p>
+                        </article>
+                    </div>
+                </section>
+
+                <div
+                    class="empty-message"
+                    id="emptyMessage"
+                    role="status"
+                    aria-live="polite"
+                >
+                    No resume sections match the selected category.
+                </div>
+
+            </div>
+        </div>
+
+        <section class="template-callout">
+            <div>
+                <h2>Build your own professional resume.</h2>
+
+                <p>
+                    Download my editable resume template and customize it for
+                    your own software engineering, technology or research
+                    career.
+                </p>
+            </div>
+
+            <a
+                class="resume-button"
+                href="assets/documents/Software-Engineer-Resume-Template.docx"
+                download
+            >
+                Download Word Template
+            </a>
+        </section>
+
+        <footer class="portfolio-footer">
+            Designed &amp; Developed
+            <span>© Shomoita Jahid Mitin</span>
+        </footer>
+
+    </main>
+
+    <script>
+        const sectionToggles = document.querySelectorAll(".section-toggle");
+        const resumeSections = document.querySelectorAll(".resume-section");
+        const filterButtons = document.querySelectorAll(".filter-button");
+
+        const expandAllButton = document.getElementById("expandAll");
+        const collapseAllButton = document.getElementById("collapseAll");
+        const toggleViewButton = document.getElementById("toggleView");
+        const printResumeButton = document.getElementById("printResume");
+        const emptyMessage = document.getElementById("emptyMessage");
+
+        function setSectionState(toggle, shouldExpand) {
+            const contentId = toggle.getAttribute("aria-controls");
+            const content = document.getElementById(contentId);
+            const icon = toggle.querySelector(".toggle-icon");
+
+            toggle.setAttribute(
+                "aria-expanded",
+                shouldExpand.toString()
+            );
+
+            content.hidden = !shouldExpand;
+            icon.textContent = shouldExpand ? "−" : "+";
+        }
+
+        sectionToggles.forEach((toggle) => {
+            toggle.addEventListener("click", () => {
+                const isExpanded =
+                    toggle.getAttribute("aria-expanded") === "true";
+
+                setSectionState(toggle, !isExpanded);
+            });
+        });
+
+        filterButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const selectedFilter = button.dataset.filter;
+                let visibleSectionCount = 0;
+
+                filterButtons.forEach((filterButton) => {
+                    const isSelected = filterButton === button;
+
+                    filterButton.classList.toggle(
+                        "active",
+                        isSelected
+                    );
+
+                    filterButton.setAttribute(
+                        "aria-pressed",
+                        isSelected.toString()
+                    );
+                });
+
+                resumeSections.forEach((section) => {
+                    const categories =
+                        section.dataset.category.split(" ");
+
+                    const shouldShow =
+                        selectedFilter === "all" ||
+                        categories.includes(selectedFilter);
+
+                    section.classList.toggle(
+                        "filtered-out",
+                        !shouldShow
+                    );
+
+                    if (shouldShow) {
+                        visibleSectionCount += 1;
+                    }
+                });
+
+                emptyMessage.classList.toggle(
+                    "visible",
+                    visibleSectionCount === 0
+                );
+            });
+        });
+
+        expandAllButton.addEventListener("click", () => {
+            sectionToggles.forEach((toggle) => {
+                const parentSection = toggle.closest(".resume-section");
+
+                if (!parentSection.classList.contains("filtered-out")) {
+                    setSectionState(toggle, true);
+                }
+            });
+        });
+
+        collapseAllButton.addEventListener("click", () => {
+            sectionToggles.forEach((toggle) => {
+                setSectionState(toggle, false);
+            });
+        });
+
+        toggleViewButton.addEventListener("click", () => {
+            const isCompact =
+                document.body.classList.toggle("compact-view");
+
+            toggleViewButton.setAttribute(
+                "aria-pressed",
+                isCompact.toString()
+            );
+
+            toggleViewButton.textContent = isCompact
+                ? "Use Detailed View"
+                : "Use Compact View";
+        });
+
+        printResumeButton.addEventListener("click", () => {
+            sectionToggles.forEach((toggle) => {
+                setSectionState(toggle, true);
+            });
+
+            window.print();
+        });
+    </script>
+</body>
+</html>
