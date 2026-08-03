@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Interactive educational visualization of the Bi-cephalic Self-Attention Model (BiSAM) for classifying Parkinson's disease patients with freezing of gait using resting-state EEG and objective descriptive variables.">
+<title>BiSAM Interactive Research Story</title>
+<style>
+:root{--red:#df1111;--red2:#ff5a5a;--ink:#171717;--muted:#686868;--line:#ded9d6;--paper:#f7f4f2;--card:rgba(255,255,255,.94)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 10% 0,rgba(223,17,17,.14),transparent 28%),var(--paper)}
+body{display:flex;flex-direction:column}.shell{width:min(1560px,100%);margin:auto;padding:22px;display:grid;gap:18px;flex:1}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px 18px;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:0 18px 55px rgba(36,0,0,.12)}
+.brand{display:flex;gap:13px;align-items:center}.logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:#fff;font-weight:900;background:linear-gradient(135deg,var(--red),var(--red2));box-shadow:0 10px 26px rgba(223,17,17,.28)}.title{font-size:clamp(1.08rem,2vw,1.45rem);font-weight:900}.sub{margin-top:3px;color:var(--muted);font-size:.9rem}.controls{display:flex;gap:9px;flex-wrap:wrap}button,select{min-height:42px;border:1px solid var(--line);border-radius:12px;padding:0 14px;background:#fff;font:inherit;font-weight:750}button{cursor:pointer}button:hover{border-color:rgba(223,17,17,.5)}button:focus-visible,select:focus-visible{outline:3px solid rgba(223,17,17,.28);outline-offset:2px}.primary{color:#fff;background:linear-gradient(135deg,var(--red),#f04a4a);border-color:transparent}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 365px;gap:18px;min-height:790px}.stage{position:relative;min-height:790px;border-radius:25px;overflow:hidden;background:radial-gradient(circle at 38% 34%,#3d3d3d 0,#191919 43%,#070707 100%);box-shadow:0 20px 60px rgba(25,0,0,.18)}canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}.status{position:absolute;left:18px;top:18px;padding:10px 13px;border-radius:13px;color:#fff;background:rgba(0,0,0,.58);border:1px solid rgba(255,255,255,.16);font-size:.85rem;backdrop-filter:blur(10px);max-width:70%}.legend{position:absolute;left:18px;bottom:18px;display:flex;gap:8px;flex-wrap:wrap;max-width:calc(100% - 36px)}.pill{padding:8px 10px;border-radius:999px;color:#fff;background:rgba(0,0,0,.58);border:1px solid rgba(255,255,255,.15);font-size:.75rem}.side{display:grid;gap:14px;align-content:start;max-height:790px;overflow:auto;padding-right:3px}.card{padding:17px;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:0 12px 35px rgba(35,0,0,.08)}.eyebrow{margin:0 0 6px;color:var(--red);font-size:.74rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.card-title{font-size:1.04rem;font-weight:900}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.metric{padding:10px 5px;text-align:center;border:1px solid var(--line);border-radius:12px;background:#fff}.metric strong{display:block;font-size:1.05rem}.metric small{color:var(--muted);font-size:.67rem}.accuracy{margin-top:12px;padding:14px;border-radius:15px;background:#171717;color:#fff}.accuracy strong{font-size:1.5rem;color:#ff6868}.steps{display:grid;gap:7px;margin-top:12px}.step{display:grid;grid-template-columns:30px 1fr;gap:9px;align-items:center;padding:8px;border-radius:12px;border:1px solid transparent}.step.active{background:rgba(223,17,17,.08);border-color:rgba(223,17,17,.22)}.num{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;color:#fff;background:#1d1d1d;font-size:.8rem;font-weight:900}.step.active .num{background:var(--red)}.step small,.note{color:var(--muted);line-height:1.45}.channel-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;max-height:150px;overflow:auto}.channel{padding:5px 8px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:.72rem;font-weight:800}.channel.top{color:#fff;background:var(--red);border-color:var(--red)}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.fact{padding:10px 6px;text-align:center;border-radius:12px;background:#fff;border:1px solid var(--line)}.fact strong{display:block;font-size:1.1rem}.fact small{font-size:.67rem;color:var(--muted)}footer{text-align:center;padding:18px 22px 26px;color:#666;font-size:.88rem}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.stage{min-height:720px}.side{grid-template-columns:repeat(2,minmax(0,1fr));max-height:none;overflow:visible}}@media(max-width:680px){.shell{padding:12px}.controls{width:100%}.controls>*{flex:1 1 120px}.stage{min-height:650px}.side{grid-template-columns:1fr}.sub{display:none}.legend{display:none}.status{max-width:90%}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+<section class="topbar" aria-label="BiSAM visualization controls">
+  <div class="brand"><div class="logo">Bi</div><div><div class="title">BiSAM Interactive Research Story</div><div class="sub">Resting-state EEG + objective descriptive variables → bi-cephalic self-attention → FOG-specific classification</div></div></div>
+  <div class="controls">
+    <select id="model" aria-label="Select BiSAM EEG channel configuration"><option value="4">BiSAM-4</option><option value="8" selected>BiSAM-8</option><option value="16">BiSAM-16</option><option value="63">BiSAM-63</option></select>
+    <button id="labels" aria-pressed="true">Hide labels</button><button id="rotate">Pause motion</button><button id="reset">Reset view</button><button id="play" class="primary">Play full story</button>
+  </div>
+</section>
+<section class="layout">
+  <div class="stage" aria-label="Interactive BiSAM research visualization"><canvas id="viz"></canvas><div class="status" id="status" role="status" aria-live="polite">BiSAM-8 selected — the eight highest-ranked channels are illuminated</div><div class="legend"><span class="pill">Red: selected EEG channels and signal pathway</span><span class="pill">White: objective descriptive variables</span><span class="pill">Dual arcs: temporal + contextual attention</span></div></div>
+  <aside class="side">
+    <section class="card"><p class="eyebrow">Selected EEG configuration</p><div class="card-title"><span id="modelName">BiSAM-8</span> Channels</div><div id="channelList" class="channel-list" aria-live="polite"></div><p class="note">Reduced-channel models use the highest-ranked channels from the paper's feature-importance analysis. Red channel tags are the channels illuminated on the EEG cap.</p></section>
+    <section class="card"><p class="eyebrow">Primary analysis</p><div class="card-title">PDFOG+ vs PDFOG− + Healthy Controls</div><div class="metrics"><div class="metric"><strong id="accuracy">88%</strong><small>Accuracy</small></div><div class="metric"><strong id="recall">88%</strong><small>Recall</small></div><div class="metric"><strong id="f1">88%</strong><small>F1 score</small></div></div><div class="accuracy">Selected multimodal result<br><strong id="selectedResult">BiSAM-8: 88%</strong></div><p class="note">This dashboard shows the paper's multimodal primary-analysis metrics, not a simulated patient confidence score.</p></section>
+    <section class="card"><p class="eyebrow">Research pipeline</p><div class="card-title">The Complete Story</div><div class="steps"><div class="step active"><span class="num">1</span><span><b>Participant and resting-state EEG</b><br><small>Eyes open, seated, 120–180 seconds</small></span></div><div class="step"><span class="num">2</span><span><b>EEG preprocessing</b><br><small>Common-average reference, 0.5–50 Hz, ICA, 90 epochs</small></span></div><div class="step"><span class="num">3</span><span><b>PSD feature engineering</b><br><small>Theta, alpha, beta, and gamma power</small></span></div><div class="step"><span class="num">4</span><span><b>Objective descriptive variables</b><br><small>Age, schooling, and disease duration</small></span></div><div class="step"><span class="num">5</span><span><b>BiSAM architecture</b><br><small>Embedding, positional encoding, dual attention pathways</small></span></div><div class="step"><span class="num">6</span><span><b>Multimodal fusion</b><br><small>EEG representation + descriptive representation</small></span></div><div class="step"><span class="num">7</span><span><b>FOG-specific classification</b><br><small>Primary: PDFOG+ vs PDFOG− + HC</small></span></div></div></section>
+    <section class="card"><p class="eyebrow">Study cohort</p><div class="card-title">124 Participants</div><div class="facts"><div class="fact"><strong>42</strong><small>PDFOG+</small></div><div class="fact"><strong>41</strong><small>PDFOG−</small></div><div class="fact"><strong>41</strong><small>Healthy controls</small></div></div></section>
+    <section class="card"><p class="eyebrow">Important</p><p class="note">This portfolio animation explains the published research workflow. It does not accept patient data, detect a live freezing episode, or provide clinical diagnosis.</p></section>
+  </aside>
+</section>
+</main>
+<footer>Designed &amp; Developed © Shomoita Jahid Mitin</footer>
+<script>
+(()=>{
+const canvas=document.getElementById('viz'),ctx=canvas.getContext('2d');
+const model=document.getElementById('model'),play=document.getElementById('play'),rotateBtn=document.getElementById('rotate'),reset=document.getElementById('reset'),labelsBtn=document.getElementById('labels'),status=document.getElementById('status');
+const steps=[...document.querySelectorAll('.step')],channelList=document.getElementById('channelList');
+const ranked=['TP9','FT8','Oz','Fp1','POz','C1','Iz','T8','FT10','CP2','FC6','CP1','F4','C4','P5','CPz'];
+const all63=['Fp1','Fp2','F7','F3','Fz','F4','F8','FT9','FT7','FC5','FC3','FC1','FCz','FC2','FC4','FC6','FT8','FT10','T7','C5','C3','C1','Cz','C2','C4','C6','T8','TP9','TP7','CP5','CP3','CP1','CPz','CP2','CP4','CP6','TP8','TP10','P7','P5','P3','P1','Pz','P2','P4','P6','P8','PO9','PO7','PO3','POz','PO4','PO8','PO10','O1','Oz','O2','Iz','AF7','AF3','AF4','AF8','F1'];
+const perf={4:{a:'88%',r:'81%',f:'83%'},8:{a:'88%',r:'88%',f:'88%'},16:{a:'72%',r:'72%',f:'74%'},63:{a:'80%',r:'80%',f:'80%'}};
+let W=0,H=0,dpr=1,channels=8,auto=true,showLabels=true,playing=false,storyStage=0,time=0,drag=false,lastX=0,viewYaw=0,zoom=1;
+const particles=[];
+function resize(){const r=canvas.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}new ResizeObserver(resize).observe(canvas);resize();
+function selectedNames(){return channels===63?all63:ranked.slice(0,channels)}
+function updatePanel(){const names=selectedNames();channelList.innerHTML=names.map(n=>`<span class="channel ${ranked.includes(n)?'top':''}">${n}</span>`).join('');document.getElementById('modelName').textContent=`BiSAM-${channels}`;const p=perf[channels];document.getElementById('accuracy').textContent=p.a;document.getElementById('recall').textContent=p.r;document.getElementById('f1').textContent=p.f;document.getElementById('selectedResult').textContent=`BiSAM-${channels}: ${p.a}`}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function glowCircle(x,y,r,color,glow=0){ctx.save();ctx.shadowColor=color;ctx.shadowBlur=glow;const g=ctx.createRadialGradient(x-r*.3,y-r*.3,1,x,y,r);g.addColorStop(0,'#fff');g.addColorStop(.25,color);g.addColorStop(1,'rgba(20,20,20,.95)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.restore()}
+function label(text,x,y,align='center',size=12,color='#fff',weight=800){ctx.font=`${weight} ${size}px Inter,Arial`;ctx.textAlign=align;ctx.fillStyle=color;ctx.fillText(text,x,y)}
+function line(x1,y1,x2,y2,color='rgba(255,255,255,.3)',w=1){ctx.strokeStyle=color;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke()}
+function drawHuman(t){const baseX=W*.205,headY=H*.30,scale=Math.min(W/1250,H/800)*zoom;const sway=Math.sin(t*.0008)*3*(auto?1:0)+viewYaw*16;ctx.save();ctx.translate(baseX+sway,0);ctx.scale(scale,scale);
+// torso and shoulders
+ctx.fillStyle='rgba(226,226,226,.16)';ctx.strokeStyle='rgba(255,255,255,.34)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-112,620);ctx.quadraticCurveTo(-120,470,-68,430);ctx.quadraticCurveTo(-42,410,-31,378);ctx.lineTo(31,378);ctx.quadraticCurveTo(42,410,68,430);ctx.quadraticCurveTo(120,470,112,620);ctx.closePath();ctx.fill();ctx.stroke();
+// neck
+ctx.fillStyle='rgba(232,193,170,.34)';ctx.beginPath();ctx.roundRect(-29,333,58,92,22);ctx.fill();
+// head
+ctx.fillStyle='rgba(237,202,180,.48)';ctx.strokeStyle='rgba(255,255,255,.5)';ctx.beginPath();ctx.ellipse(0,255,87,112,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+// ears and facial guide
+ctx.beginPath();ctx.ellipse(-89,258,13,27,0,0,Math.PI*2);ctx.ellipse(89,258,13,27,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.strokeStyle='rgba(255,255,255,.22)';ctx.beginPath();ctx.arc(0,267,35,.25*Math.PI,.75*Math.PI);ctx.stroke();ctx.fillStyle='rgba(255,255,255,.55)';ctx.beginPath();ctx.arc(-30,240,3,0,7);ctx.arc(30,240,3,0,7);ctx.fill();
+// EEG cap
+ctx.fillStyle='rgba(30,30,34,.82)';ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,230,90,Math.PI,2*Math.PI);ctx.quadraticCurveTo(94,265,82,294);ctx.lineTo(-82,294);ctx.quadraticCurveTo(-94,265,-90,230);ctx.closePath();ctx.fill();ctx.stroke();
+// cap seams
+ctx.strokeStyle='rgba(255,255,255,.17)';for(let a=-1.15;a<=1.15;a+=.38){ctx.beginPath();ctx.ellipse(0,240,90,32,0,a,a+Math.PI);ctx.stroke()}for(let x=-60;x<=60;x+=30){ctx.beginPath();ctx.moveTo(x,150);ctx.quadraticCurveTo(x*.55,220,x*.75,292);ctx.stroke()}
+const positions=capPositions();const selected=new Set(selectedNames());positions.forEach((p,i)=>{const active=selected.has(p.name);const pulse=active?(1+Math.sin(t*.004+i)*.16):1;glowCircle(p.x,p.y,(active?5.7:3.2)*pulse,active?'#df1111':'#525252',active?15:0);if(showLabels&&active&&(channels<=16||ranked.includes(p.name))){const dx=p.x<0?-24:24,align=p.x<0?'right':'left';line(p.x,p.y,p.x+dx,p.y-10,'rgba(255,100,100,.65)',1);label(p.name,p.x+dx+(p.x<0?-3:3),p.y-12,align,9,'#fff',800)}});
+label(`${channels} selected EEG channels`,0,120,'center',13,'#fff',900);label('Resting-state EEG cap',0,652,'center',14,'rgba(255,255,255,.8)',800);ctx.restore();return {x:baseX+sway+85*scale,y:headY+30*scale,scale}}
+function capPositions(){const names=all63;const out=[];for(let i=0;i<names.length;i++){const row=Math.floor(i/9),col=i%9;const yy=166+row*19;const width=70-Math.abs(row-3)*5;const xx=-width+(col/8)*width*2+(row%2?5:0);out.push({name:names[i],x:xx,y:yy})}return out}
+function box(x,y,w,h,title,sub,color='#df1111',active=true){
+  ctx.save();ctx.fillStyle='rgba(10,10,10,.86)';ctx.strokeStyle=active?color:'rgba(255,255,255,.22)';ctx.lineWidth=active?2:1;ctx.shadowColor=active?color:'transparent';ctx.shadowBlur=active?12:0;rr(x-w/2,y-h/2,w,h,14);ctx.fill();ctx.stroke();ctx.restore();
+  const titleSize=w<102?10:w<116?11:13;
+  const subSize=w<102?7:w<116?8:9;
+  label(title,x,y-3,'center',titleSize,'#fff',900);
+  if(sub)label(sub,x,y+16,'center',subSize,'rgba(255,255,255,.62)',700)
+}
+function wave(x1,y,x2,t,color){ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();for(let x=x1;x<=x2;x+=3){const yy=y+Math.sin((x-x1)*.11+t*.009)*8+Math.sin((x-x1)*.035+t*.004)*4;x===x1?ctx.moveTo(x,yy):ctx.lineTo(x,yy)}ctx.stroke()}
+function drawPipeline(t,human){
+  const cy=H*.48;
+  const left=Math.max(W*.36,human.x+76);
+  const right=W-58;
+  const available=Math.max(480,right-left);
+  const gap=available/5;
+  const pts=Array.from({length:6},(_,i)=>left+gap*i);
+  const nodeW=Math.max(82,Math.min(118,gap-14));
+  const attentionW=Math.max(88,Math.min(126,gap-12));
+  const fusionW=Math.max(84,Math.min(110,gap-14));
+  const outputW=Math.max(92,Math.min(126,gap-12));
+  const half=[nodeW/2,nodeW/2,nodeW/2,attentionW/2,fusionW/2,outputW/2];
+
+  // Main pathway uses the actual outside edges of each card, preventing overlap.
+  for(let i=0;i<pts.length-1;i++){
+    line(pts[i]+half[i]+6,cy,pts[i+1]-half[i+1]-6,cy,
+      i<storyStage?'rgba(255,65,65,.8)':'rgba(255,255,255,.16)',i<storyStage?3:1);
+  }
+
+  const eegY=cy-92;
+  wave(human.x,human.y,pts[0]-nodeW/2-10,eegY,t,'rgba(255,55,55,.8)');
+  line(human.x,human.y,pts[0]-nodeW/2-10,eegY,'rgba(255,55,55,.4)',1);
+  box(pts[0],eegY,nodeW,72,'EEG acquisition','500 Hz • eyes open','#df1111',storyStage>=0);
+  box(pts[1],eegY,nodeW,72,'Preprocessing','0.5–50 Hz • ICA','#df1111',storyStage>=1);
+  box(pts[2],eegY,nodeW,72,'PSD features','θ • α • β • γ','#df1111',storyStage>=2);
+
+  // Descriptive branch is placed below the first half of the pipeline.
+  const dy=cy+122;
+  box(pts[1],dy,Math.min(144,nodeW+18),76,'Objective variables','Age • school • duration','#eeeeee',storyStage>=3);
+  line(pts[1]+Math.min(144,nodeW+18)/2,dy,pts[3]-attentionW/2,cy+58,
+    storyStage>=3?'rgba(255,255,255,.65)':'rgba(255,255,255,.15)',2);
+
+  // Dual attention cards are vertically separated and centered in their column.
+  box(pts[3],cy-58,attentionW,70,'Temporal attention','sequence patterns','#df1111',storyStage>=4);
+  box(pts[3],cy+58,attentionW,70,'Context attention','feature relations','#df1111',storyStage>=4);
+  line(pts[2]+nodeW/2, eegY, pts[3]-attentionW/2, cy-58,'rgba(255,55,55,.7)',2);
+  line(pts[2]+nodeW/2, eegY, pts[3]-attentionW/2, cy+58,'rgba(255,55,55,.7)',2);
+
+  box(pts[4],cy,fusionW,78,'Fusion','multimodal','#ff5454',storyStage>=5);
+  line(pts[3]+attentionW/2,cy-58,pts[4]-fusionW/2,cy,'rgba(255,55,55,.8)',2);
+  line(pts[3]+attentionW/2,cy+58,pts[4]-fusionW/2,cy,'rgba(255,55,55,.8)',2);
+
+  box(pts[5],cy,outputW,86,'Classification','PDFOG+ vs others','#ff5454',storyStage>=6);
+
+  const oy=cy+158;
+  ['PDFOG+','PDFOG− + HC'].forEach((s,i)=>{
+    const x=pts[5]+(i?42:-42);
+    glowCircle(x,oy,storyStage>=6?17:12,i===0?'#df1111':'#777',storyStage>=6?18:2);
+    label(s,x,oy+36,'center',10,'#fff',900)
+  });
+
+  particles.forEach(p=>{
+    p.t+=p.s;if(p.t>1)p.t=0;
+    const x=p.x1+(p.x2-p.x1)*p.t,y=p.y1+(p.y2-p.y1)*p.t;
+    glowCircle(x,y,3,p.color,10)
+  });
+}
+
+function draw(t){time=t;ctx.clearRect(0,0,W,H);ctx.fillStyle='rgba(255,255,255,.024)';for(let x=0;x<W;x+=42)for(let y=0;y<H;y+=42){ctx.beginPath();ctx.arc(x,y,1,0,7);ctx.fill()}const human=drawHuman(t);drawPipeline(t,human);requestAnimationFrame(draw)}
+function setStep(i,text){storyStage=i;steps.forEach((s,n)=>s.classList.toggle('active',n===i));status.textContent=text}
+function seedParticles(){particles.length=0;const y=H*.48;for(let i=0;i<28;i++)particles.push({x1:W*.38,x2:W*.91,y1:y-85+(i%3-1)*8,y2:y+(i%5-2)*7,t:Math.random(),s:.003+Math.random()*.004,color:i%4===0?'#fff':'#ff3636'})}
+function run(){if(playing)return;playing=true;seedParticles();const seq=[
+()=>setStep(0,'1/7 A seated participant wears a 64-channel EEG cap; 63 channels are retained for analysis'),
+()=>setStep(1,'2/7 EEG is re-referenced, filtered from 0.5–50 Hz, cleaned with ICA, and divided into 90 epochs'),
+()=>setStep(2,'3/7 Power spectral density features are extracted for theta, alpha, beta, and gamma bands'),
+()=>setStep(3,'4/7 Objective variables add age, years of schooling, and disease duration'),
+()=>setStep(4,'5/7 BiSAM uses embedding, positional encoding, and two parallel attention pathways'),
+()=>setStep(5,'6/7 EEG and descriptive representations are fused in the multimodal model'),
+()=>setStep(6,'7/7 Primary classification distinguishes PDFOG+ from PDFOG− plus healthy controls'),
+()=>{playing=false;play.textContent='Play full story';status.textContent=`Story complete — BiSAM-${channels} multimodal primary-analysis accuracy: ${perf[channels].a}`}
+];let i=0;play.textContent='Playing…';seq[i++]();const timer=setInterval(()=>{seq[i++]();if(i===seq.length)clearInterval(timer)},1650)}
+model.addEventListener('change',()=>{channels=+model.value;storyStage=0;updatePanel();status.textContent=`BiSAM-${channels} selected — ${channels===63?'all retained channels':'top-ranked channels'} illuminated on the EEG cap`});
+labelsBtn.addEventListener('click',()=>{showLabels=!showLabels;labelsBtn.textContent=showLabels?'Hide labels':'Show labels';labelsBtn.setAttribute('aria-pressed',String(showLabels))});
+rotateBtn.addEventListener('click',()=>{auto=!auto;rotateBtn.textContent=auto?'Pause motion':'Resume motion'});reset.addEventListener('click',()=>{viewYaw=0;zoom=1;storyStage=0;particles.length=0;setStep(0,'View reset — select a channel configuration or play the full research story')});play.addEventListener('click',run);
+canvas.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(!drag)return;viewYaw=Math.max(-1.2,Math.min(1.2,viewYaw+(e.clientX-lastX)*.006));lastX=e.clientX});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.82,Math.min(1.18,zoom-e.deltaY*.0005))},{passive:false});
+updatePanel();requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
